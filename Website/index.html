@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"> </script>
+    <script src="script.js" type="js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <div class="navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Search Leads</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <button class="btn btn-outline-warning">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Home</h1>
+        <div class ="row">
+            <div class="col">
+                <img src="image.jpg" alt="image">
+            </div>
+            <div class="col border border-dark">
+                <div class="row mx-1 my-1">
+                    <h3>Welcome</h3>
+                </div>
+                <div class="row mx-2 my-1">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="signInUsername" placeholder="Enter username" name="signInUsername">
+                </div>
+                <div class="row mx-2 my-1">
+                    <label for="signInPassword">Password:</label>
+                    <input type="password" class="form-control" id="signInPassword" placeholder="Enter password" name="signInPassword">
+                </div>
+                <div class="row my-3">
+                    <div class="col">
+                        <button class="btn btn-success" id="signInButton" name="signInButton" onclick="signIn">Sign In</button>
+                        <button class="btn btn-warning">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

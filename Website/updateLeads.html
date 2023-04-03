@@ -33,39 +33,32 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <h1>Home</h1>
-        <div class="row">
+    <div class="col">
+        <div class="row mx-1 my-1">
+            <h3>Lead Information</h3>
+        </div>
+        <div class="row mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadName" placeholder="Name" >
+        </div>
+        <div class="row mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadPhone" placeholder="Telephone Number"">
+        </div>
+        <div class="row mx-2 my-3">
+            <input type="email" class="form-control" id="updatedLeadEmail" placeholder="Email Address">
+        </div>
+        <div class="row mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadCompanyWebsite" placeholder="Company Website"
+               >
+        </div>
+        <div class="row mx-2 my-3">
+            <input type="email" class="form-control" id="updatedLeadCompanyEmail" placeholder="Company Email"
+               >
+        </div>
+        <div class="row my-3">
             <div class="col">
-                <img src="homeImage.jpg" alt="image">
-            </div>
-            <div class="col border border-dark">
-                <div class="row mx-1 my-1">
-                    <h3>Welcome</h3>
-                </div>
-                <div class="row mx-2 my-1">
-                    <label for="username">Username:</label>
-                    <input type="text" class="form-control" id="signInUsername" placeholder="Enter username"
-                        name="signInUsername">
-                </div>
-                <div class="row mx-2 my-1">
-                    <label for="signInPassword">Password:</label>
-                    <input type="password" class="form-control" id="signInPassword" placeholder="Enter password"
-                        name="signInPassword">
-                </div>
-                <div class="row my-3">
-                    <div class="col">
-                        <a href="createLeads.html" class="btn btn-success" role="signInButton" id="signInButton"
-                            name="signInButton">Sign In</a>
-                        <a href="index.html" class="btn btn-warning" role="cancelSignInButton" id="cancelSignInButton"
-                            name="cancelSignInButton">Cancel</a>
-
-                    </div>
-                </div>
+                <a href="searchLeads.html" class="btn btn-primary" id="updateLeadButton">Update</a>
+                <a href="" class="btn btn-warning" id="cancelUpdateLead" onclick="">Cancel</a>
             </div>
         </div>
     </div>
-
 </body>
-
-</html>

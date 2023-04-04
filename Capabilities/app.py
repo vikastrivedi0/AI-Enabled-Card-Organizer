@@ -51,6 +51,7 @@ def detect_image_text(image_id):
     text_lines = recognition_service.detect_text(image_id)
 
     detected_text = []
+
     for line in text_lines:
         # check confidence
         if float(line['confidence']) >= MIN_CONFIDENCE:

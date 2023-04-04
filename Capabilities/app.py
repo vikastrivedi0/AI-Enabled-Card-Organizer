@@ -87,3 +87,28 @@ def detect_image_text(image_id):
         'emails': emails,
         'urls': urls
     }
+
+@app.route('/images/{image_id}/translate-text', methods = ['POST'], cors = True)
+def translate_image_text(image_id):
+    """detects then translates text in the specified image"""
+    request_data = json.loads(app.current_request.raw_body)
+    from_lang = request_data['fromLang']
+    to_lang = request_data['toLang']
+
+    MIN_CONFIDENCE = 80.0
+
+    text_lines = recognition_service.detect_text(image_id)
+
+    translated_lines = []
+    for line in text_lines:
+        # check confidence
+        if float(line['confidence']) >= MIN_CONFIDENCE:
+            translated_line = translation_service.translate_text(line['text'], from_lang, to_lang)
+            translated_lines.append({
+                'text': line['text'],
+                'translation': translated_line,
+                'boundingBox': line['boundingBox']
+            })
+
+    return translated_lines
+

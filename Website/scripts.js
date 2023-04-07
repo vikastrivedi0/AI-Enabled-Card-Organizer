@@ -65,6 +65,7 @@ function translateImage(image) {
     })
 }
 
+//TODO
 function detectText(image) {
     // make server call to translate image
     // and return the server upload promise
@@ -99,7 +100,7 @@ function annotateImage(translations) {
         translationsElem.appendChild(translationElem);
     }
 }
-
+//TODO
 function uploadAndTranslate() {
     uploadImage()
         .then(image => translateImage(image))

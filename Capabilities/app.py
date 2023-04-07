@@ -27,7 +27,7 @@ comprehension_service = comprehension_service.ComprehensionService()
 #####
 # RESTful endpoints
 #####
-@app.route('/images', methods = ['POST'], cors = True)
+@app.route('/images', methods=['POST'], cors=True)
 def upload_image():
     """processes file upload and saves file to storage service"""
     request_data = json.loads(app.current_request.raw_body)
@@ -39,7 +39,7 @@ def upload_image():
     return image_info
 
 
-@app.route('/images/{image_id}/detect-text', methods = ['POST'], cors = True)
+@app.route('/images/{image_id}/detect-text', methods=['POST'], cors=True)
 def detect_image_text(image_id):
     """detects then translates text in the specified image"""
     request_data = json.loads(app.current_request.raw_body)
@@ -55,18 +55,20 @@ def detect_image_text(image_id):
     for line in text_lines:
         # check confidence
         if float(line['confidence']) >= MIN_CONFIDENCE:
-            translated_line = translation_service.translate_text(line['text'], from_lang, to_lang)
-            detected_label = comprehension_service.comprehend_text(translated_line['translatedText'])
+            translated_line = translation_service.translate_text(
+                line['text'], from_lang, to_lang)
+            detected_label = comprehension_service.comprehend_text(
+                translated_line['translatedText'])
             detected_text.append({
                 'translation': translated_line,
                 'labels': detected_label,
             })
 
-            names=[]
-            addresses=[]
-            phones=[]
-            emails=[]
-            urls=[]
+            names = []
+            addresses = []
+            phones = []
+            emails = []
+            urls = []
             for i in detected_text:
                 for j in (i['labels']['labels']):
                     if (j['Type']) == "NAME":
@@ -80,7 +82,6 @@ def detect_image_text(image_id):
                     elif (j['Type']) == "URL":
                         urls.append(i['translation']['translatedText'])
 
-          
     return {
         'names': names,
         'addresses': addresses,
@@ -89,7 +90,8 @@ def detect_image_text(image_id):
         'urls': urls
     }
 
-@app.route('/images/{image_id}/translate-text', methods = ['POST'], cors = True)
+
+@app.route('/images/{image_id}/translate-text', methods=['POST'], cors=True)
 def translate_image_text(image_id):
     """detects then translates text in the specified image"""
     request_data = json.loads(app.current_request.raw_body)
@@ -104,7 +106,8 @@ def translate_image_text(image_id):
     for line in text_lines:
         # check confidence
         if float(line['confidence']) >= MIN_CONFIDENCE:
-            translated_line = translation_service.translate_text(line['text'], from_lang, to_lang)
+            translated_line = translation_service.translate_text(
+                line['text'], from_lang, to_lang)
             translated_lines.append({
                 'text': line['text'],
                 'translation': translated_line,
@@ -112,4 +115,3 @@ def translate_image_text(image_id):
             })
 
     return translated_lines
-

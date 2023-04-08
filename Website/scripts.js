@@ -9,7 +9,7 @@ async function uploadImage(event) {
 
     //display image
     let imageContainer = document.getElementById('imageOutput');
-    imageContainer.src = URL.createObjectURL(file);
+    imageContainer.src = URL.createObjectURL(event.target.files[0]);
 
     let converter = new Promise(function (resolve, reject) {
         const reader = new FileReader();

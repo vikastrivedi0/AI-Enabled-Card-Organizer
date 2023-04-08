@@ -38,9 +38,7 @@ async function uploadImage() {
 }
 
 function updateImage(image) {
-    document.getElementById("view").style.display = "block";
-
-    let imageElem = document.getElementById("image");
+    let imageElem = document.getElementById("imageOutput");
     imageElem.src = image["fileUrl"];
     imageElem.alt = image["fileId"];
 
@@ -250,13 +248,20 @@ function annotateImage(translations) {
 */
 
 //TODO
-function uploadAndDetect(event) {
-    uploadImage(event)
+function uploadAndDetect() {
+    uploadImage()
         .then(image => updateImage(image))
-        .then(image => translateImage(image))
-        .then(translations => annotateImage(translations))
         .then(image => detectText(image))
         .then(text => fillCreateForm(text))
+        .catch(error => {
+            alert("Error: " + error);
+        })
+}
+
+function Translate() {
+    updateImage()
+        .then(image => translateImage(image))
+        .then(translations => annotateImage(translations))
         .catch(error => {
             alert("Error: " + error);
         })

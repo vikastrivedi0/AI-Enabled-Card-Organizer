@@ -153,6 +153,30 @@ function submitNewLead(){
 
     //take values and submit to database etc here
 
+    var dict = { 'lead_name':leadname, 
+                 'company_name':companyName,
+                 'phone1':phone1,
+                 'phone2':phone2, 
+                 'address':address,
+                 'website':website,
+                 'lead_email':email 
+                };
+
+    return fetch(serverUrl + "/save", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dict)
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new HttpError(response);
+        }
+    })
+
 }
 //TODO
 function updateLead(){
@@ -180,8 +204,30 @@ function signIn(){
     let password = document.getElementById('signInPassword').value
 
     //use db to check if user and pass match
+      //username=firstName+lastName;
+      var dict={
+        'username':username,
+        'password':password
+    }
+
+    
+        return fetch(serverUrl + "/signin", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dict)
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new HttpError(response);
+            }
+        })
 
 }
+
 
 
 function signUp(){
@@ -192,9 +238,31 @@ function signUp(){
     let confirmPassword = document.getElementById('signUpPasswordConfirm').value
 
     if (password === confirmPassword){
-        //check if passwords match, then submit to db
-        //TODO
+        
+        //username=firstName+lastName;
+        var dict={
+            'username':username,
+            'password':password
+        }
+
+        
+    return fetch(serverUrl + "/signup", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dict)
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new HttpError(response);
+        }
+    })
     }
+
+
 }
 //TODO
 function detectText(image) {

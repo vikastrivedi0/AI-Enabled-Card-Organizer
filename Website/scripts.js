@@ -1,15 +1,11 @@
 //show image on html, access image with event.target.files[0]
 "use strict";
 
-const serverUrl = "";
+const serverUrl = "http://127.0.0.1:8000";
 
-async function uploadImage(event) {
+async function uploadImage() {
     // encode input file as base64 string for upload
-    let file = event.target.files[0];
-
-    //display image
-    let imageContainer = document.getElementById('imageOutput');
-    imageContainer.src = URL.createObjectURL(event.target.files[0]);
+    let file = document.getElementById("uploadImage").files[0];
 
     let converter = new Promise(function (resolve, reject) {
         const reader = new FileReader();
@@ -39,6 +35,14 @@ async function uploadImage(event) {
             throw new HttpError(response);
         }
     })
+}
+
+function updateImage(image) {
+    let imageElem = document.getElementById("imageOutput");
+    imageElem.src = image["fileUrl"];
+    imageElem.alt = image["fileId"];
+
+    return image;
 }
 
 function clearFile() {
@@ -244,12 +248,20 @@ function annotateImage(translations) {
 */
 
 //TODO
-function uploadAndTranslate() {
+function uploadAndDetect() {
     uploadImage()
-        .then(image => translateImage(image))
-        .then(translations => annotateImage(translations))
+        .then(image => updateImage(image))
         .then(image => detectText(image))
         .then(text => fillCreateForm(text))
+        .catch(error => {
+            alert("Error: " + error);
+        })
+}
+
+function Translate() {
+    updateImage()
+        .then(image => translateImage(image))
+        .then(translations => annotateImage(translations))
         .catch(error => {
             alert("Error: " + error);
         })

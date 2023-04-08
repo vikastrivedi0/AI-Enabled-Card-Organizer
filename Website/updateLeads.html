@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"> </script>
+    <script src="scripts.js" type="js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="searchLeads.html">Search Leads</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="createLeads.html">Create Lead</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <a href="signUp.html" class="btn btn-outline-warning" role="signUpButton">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+    <div class="col">
+        <div class="row mx-1 my-1">
+            <h3>Update Lead Information</h3>
+        </div>
+        <div class="row form-group mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadCompanyName" placeholder="Company Name">
+        </div>
+        <div class="row form-group mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadContactFirstName" placeholder="First Name">
+        </div>
+        <div class="row form-group mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadContactLastName" placeholder="Last Name">
+        </div>
+        <div class="row form-group mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadPhone1" placeholder="Phone 1">
+        </div>
+        <div class="row form-group mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadPhone2" placeholder="Phone 2">
+        </div>
+        <div class="row form-group mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadAddress" placeholder="Address">
+        </div>
+        <div class="row form-group mx-2 my-3">
+            <input type="text" class="form-control" id="updatedLeadWebsite" placeholder="Company Website">
+        </div>
+        <div class="row form-group mx-2 my-3">
+            <input type="email" class="form-control" id="updatedLeadEmail" placeholder="Email">
+        </div>
+        <div class="row my-3">
+            <div class="col">
+                <a href="searchLeads.html" class="btn btn-primary" id="updateLeadButton">Update</a>
+                <a href="" class="btn btn-warning" id="cancelUpdateLead" onclick="">Cancel</a>
+            </div>
+        </div>
+    </div>
+</body>

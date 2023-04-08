@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"> </script>
+    <script src="scripts.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="searchLeads.html">Search Leads</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Create Lead</h1>
+        <div class="row">
+            <div class="col">
+                <div class="container col">
+                    <div class="row">
+                        <label for="uploadImage" class="form-label">Upload a Business card</label>
+                        <input class="form-control" type="file" accept="image/jpeg, image/png, image/jpg"
+                            id="uploadImage" onchange="uploadImage(event)">
+                    </div>
+                    <div class="img-fluid my-2 mx-2 ">
+                        <img id="imageOutput" />
+                    </div>
+                </div>
+                <h2>Translations:</h2>
+                <div id="translations"></div>
+            </div>
+
+            <div class="col form-group">
+                <div class="row mx-1 my-1">
+                    <h2>Lead Information</h2>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select class="form-control" id="newLeadCompanyName" placeholder="Company Name">
+                        <option selected>Select Company name</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadContactFirstName" placeholder="First Name">
+                        <option selected>Select First Name</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadContactLastName" placeholder="Last Name">
+                        <option selected>Select Last Name</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadPhone1" placeholder="Phone 1">
+                        <option selected>Select Phone 1</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadPhone2" placeholder="Phone 2">
+                        <option selected>Select Phone 2</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadAddress" placeholder="Address">
+                        <option selected>Select Address</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadWebsite" placeholder="Company Website">
+                        <option selected>Select Company Website</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="email" class="form-control" id="newLeadEmail" placeholder="Email">
+                        <option selected>Select Email</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row my-3">
+                    <div class="col">
+                        <a href="" class="btn btn-success" id="createLeadButton" onclick="">Save</a>
+                        <a href="" class="btn btn-warning" id="cancelCreateLead" onclick="">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

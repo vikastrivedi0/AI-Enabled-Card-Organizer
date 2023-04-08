@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"> </script>
-    <script src="scripts.js" type="js"></script>
+    <script src="script.js" type="js"></script>
 </head>
 
 <body>
@@ -28,44 +28,48 @@
                     </li>
                 </ul>
             </div>
-            <div>
-                <a href="signUp.html" class="btn btn-outline-warning" role="signUpButton">Sign Up</a>
-            </div>
         </div>
     </nav>
-    <div class="container">
-        <h1>Home</h1>
-        <div class="row">
-            <div class="col">
-                <img src="homeImage.jpg" alt="image">
-            </div>
+    <form>
+        <div class="form-group">
             <div class="col border border-dark">
                 <div class="row mx-1 my-1">
-                    <h3>Welcome</h3>
+                    <h3>Sign Up</h3>
                 </div>
                 <div class="row mx-2 my-1">
-                    <label for="signInUsername">Username:</label>
-                    <input type="text" class="form-control" id="signInUsername" placeholder="Enter username"
+                    <label for="signUpFirstName">First Name:</label>
+                    <input type="text" class="form-control" id="signUpFirstName" placeholder="Enter your first name"
+                        name="signUpFirstName">
+                </div>
+                <div class="row mx-2 my-1">
+                    <label for="signUpLastName">Last Name:</label>
+                    <input type="text" class="form-control" id="signUpLastName" placeholder="Enter your last name"
+                        name="signUpLastName">
+                </div>
+                <div class="row mx-2 my-1">
+                    <label for="signUpUsername">Username:</label>
+                    <input type="text" class="form-control" id="signUpUsername" placeholder="Enter username"
                         name="signInUsername">
                 </div>
                 <div class="row mx-2 my-1">
-                    <label for="signInPassword">Password:</label>
-                    <input type="password" class="form-control" id="signInPassword" placeholder="Enter password"
-                        name="signInPassword">
+                    <label for="signUpPassword">Password:</label>
+                    <input type="password" class="form-control" id="signUpPassword" placeholder="Enter password"
+                        name="signUpPassword">
+                </div>
+                <div class="row mx-2 my-1">
+                    <label for="signUpPasswordConfirm">Confirm Password:</label>
+                    <input type="password" class="form-control" id="signUpPasswordConfirm"
+                        placeholder="Confirm password" name="signUpPasswordConfirm">
                 </div>
                 <div class="row my-3">
                     <div class="col">
-                        <a href="createLeads.html" class="btn btn-success" role="signInButton" id="signInButton"
-                            name="signInButton">Sign In</a>
-                        <a href="index.html" class="btn btn-warning" role="cancelSignInButton" id="cancelSignInButton"
-                            name="cancelSignInButton">Cancel</a>
-
+                        <a class="btn btn-success" onclick="signUp()" role="signUpButton" id="signUpButton"
+                            name="signUpButton">Sign Up</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </form>
 </body>
 
 </html>

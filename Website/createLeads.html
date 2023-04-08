@@ -35,36 +35,67 @@
                     <div class="row">
                         <label for="uploadImage" class="form-label">Upload a Business card</label>
                         <input class="form-control" type="file" accept="image/jpeg, image/png, image/jpg"
-                            id="uploadImage" onchange="loadFile(event)">
+                            id="uploadImage" onchange="uploadImage(event)">
                     </div>
                     <div class="img-fluid my-2 mx-2 ">
-                        <img id="imageOutput" src="#" alt="your image" />
+                        <img id="imageOutput" />
                     </div>
                 </div>
+                <h2>Translations:</h2>
+                <div id="translations"></div>
             </div>
-            <div class="col">
+
+            <div class="col form-group">
                 <div class="row mx-1 my-1">
-                    <h3>Lead Information</h3>
+                    <h2>Lead Information</h2>
                 </div>
-                <div class="row mx-2 my-3">
-                    <input type="text" class="form-control" id="newLeadName" placeholder="Name"
-                        name="newLeadName">
+                <div class="row form-group mx-2 my-3">
+                    <select class="form-control" id="newLeadCompanyName" placeholder="Company Name">
+                        <option selected>Select Company name</option>
+                        <option value="1">One</option>
+                    </select>
                 </div>
-                <div class="row mx-2 my-3">
-                    <input type="text" class="form-control" id="newLeadPhone" placeholder="Telephone Number"
-                        name="newLeadPhone">
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadContactFirstName" placeholder="First Name">
+                        <option selected>Select First Name</option>
+                        <option value="1">One</option>
+                    </select>
                 </div>
-                <div class="row mx-2 my-3">
-                    <input type="email" class="form-control" id="newLeadEmail" placeholder="Email Address"
-                        name="newLeadEmail">
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadContactLastName" placeholder="Last Name">
+                        <option selected>Select Last Name</option>
+                        <option value="1">One</option>
+                    </select>
                 </div>
-                <div class="row mx-2 my-3">
-                    <input type="text" class="form-control" id="newLeadCompanyWebsite" placeholder="Company Website"
-                        name="newLeadCompanyWebsite">
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadPhone1" placeholder="Phone 1">
+                        <option selected>Select Phone 1</option>
+                        <option value="1">One</option>
+                    </select>
                 </div>
-                <div class="row mx-2 my-3">
-                    <input type="email" class="form-control" id="newLeadCompanyEmail" placeholder="Company Email"
-                        name="newLeadCompanyEmail">
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadPhone2" placeholder="Phone 2">
+                        <option selected>Select Phone 2</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadAddress" placeholder="Address">
+                        <option selected>Select Address</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="text" class="form-control" id="newLeadWebsite" placeholder="Company Website">
+                        <option selected>Select Company Website</option>
+                        <option value="1">One</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <select type="email" class="form-control" id="newLeadEmail" placeholder="Email">
+                        <option selected>Select Email</option>
+                        <option value="1">One</option>
+                    </select>
                 </div>
                 <div class="row my-3">
                     <div class="col">

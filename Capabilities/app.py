@@ -7,6 +7,7 @@ from chalicelib import comprehension_service
 
 import base64
 import json
+import dynamoauth_service
 
 #####
 # chalice app configuration
@@ -115,3 +116,20 @@ def translate_image_text(image_id):
             })
 
     return translated_lines
+
+
+## Input to Auth table of DB
+dyn = dynamoauth_service.DynamoAuthService('user_table','username','S')
+
+table_name=dyn.create_table()
+
+item ={
+    'username': {'S':'Kanishka'},
+    'password':{'S':'8437'}
+}
+dyn.put_item(item)
+
+
+username='Kanishka'
+item = dyn.get_item(username)
+print(item)

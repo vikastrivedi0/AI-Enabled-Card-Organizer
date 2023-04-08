@@ -1,6 +1,7 @@
 import boto3
 import time
-from cryptography.fernet import Fernet
+
+
 
 class DynamoAuthService:
     
@@ -9,7 +10,7 @@ class DynamoAuthService:
         self.partition_key = partition_key
         self.partition_key_type = partition_key_type
         self.client = boto3.client('dynamodb')
-        self.fernet = Fernet.generate_key()
+        
    
     def create_table(self):
         try:
@@ -34,7 +35,7 @@ class DynamoAuthService:
             )
             print(f"Table '{self.table_name}' created successfully.")
         except self.client.exceptions.ResourceInUseException as e:
-            print(f"Error creating table '{self.table_name}': {e}")
+            pass
 
     def encrypt_password(self, password):
         iv = Fernet.generate_key()
@@ -58,7 +59,7 @@ class DynamoAuthService:
 
         # encrypted_password = self.encrypt_password(item['password']['S'])
         # item['password'] = {'B': encrypted_password}
-
+        
         response = self.client.put_item(
             TableName=self.table_name, 
             Item=item

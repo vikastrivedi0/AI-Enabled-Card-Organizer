@@ -41,11 +41,11 @@ class DynamoDBService:
                 }
             )
 
-            self.client.get_waiter('table_exists').wait(TableName=table_name)
+            self.client.get_waiter('table_exists').wait(TableName=self.table_name)
             print(f"Table '{self.table_name}' created successfully.")
 
         except self.client.exceptions.ResourceInUseException as e:
-            print(f"Error creating table '{self.table_name}': {e}")
+            pass
 
     def get_item(self, username, lead_email):
         try:
@@ -66,7 +66,21 @@ class DynamoDBService:
             )
 
         print(response['Items'])
-        return response['Items']
+
+    def put_item(self, item):
+        while True:
+            if self.client.describe_table(TableName=self.table_name)['Table']['TableStatus'] == 'CREATING':
+                time.sleep(3)
+            else: 
+                break
+
+        response = self.client.put_item(
+            TableName=self.table_name, 
+            Item=item
+            )
+
+        return response
+        
 
     def query(self, username):
         response = self.client.query(
@@ -86,18 +100,3 @@ class DynamoDBService:
             Key={self.partition_key: {self.partition_type: username}, 
                 self.sort_key: {self.sort_type: lead_email}}
             )
-
-    def put_item(self, item):
-        while True:
-            if self.client.describe_table(TableName=self.table_name)['Table']['TableStatus'] == 'CREATING':
-                time.sleep(3)
-            else: 
-                break
-
-        response = self.client.put_item(
-            TableName=self.table_name, 
-            Item=item
-            )
-
-        print(response)
-        

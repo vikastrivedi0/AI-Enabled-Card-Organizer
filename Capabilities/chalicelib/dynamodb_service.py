@@ -55,6 +55,7 @@ class DynamoDBService:
                 self.sort_key: {self.sort_type: lead_email}}, 
                 ConsistentRead=True)
             print("get_item() returned:", response['Item'])
+            return response['Item']
 
         except self.client.exceptions.ResourceNotFoundException:
             print(f"Item does not exist...")
@@ -64,8 +65,27 @@ class DynamoDBService:
             TableName=self.table_name
             )
 
+
         return response['Items']
 
+    def query(self, username):
+        response = self.client.query(
+            TableName = self.table_name, 
+            KeyConditionExpression='username = :pk', 
+            ExpressionAttributeValues={':pk': {'S': username}}
+            )
+
+        for item in response['Items']:
+            print(item)
+
+        return response['Items']
+
+    def delete_item(self, username, lead_email):
+        response = self.client.delete_item(
+            TableName=self.table_name, 
+            Key={self.partition_key: {self.partition_type: username}, 
+                self.sort_key: {self.sort_type: lead_email}}
+            )
     def put_item(self, item):
         while True:
             if self.client.describe_table(TableName=self.table_name)['Table']['TableStatus'] == 'CREATING':

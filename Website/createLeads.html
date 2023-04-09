@@ -35,7 +35,7 @@
                     <div class="row">
                         <label for="uploadImage" class="form-label">Upload a Business card</label>
                         <input class="form-control" type="file" accept="image/jpeg, image/png, image/jpg"
-                            id="uploadImage" onchange="uploadImage(event)">
+                            id="uploadImage" onchange="uploadAndDetect()">
                     </div>
                     <div class="img-fluid my-2 mx-2 ">
                         <img id="imageOutput" />
@@ -50,51 +50,67 @@
                     <h2>Lead Information</h2>
                 </div>
                 <div class="row form-group mx-2 my-3">
+                    <label for="newLeadCompanyName">
+                        Company Name:
+                    </label>
                     <select class="form-control" id="newLeadCompanyName" placeholder="Company Name">
-                        <option selected>Select Company name</option>
-                        <option value="1">One</option>
+                        <option selected>Suggested Company Names</option>
                     </select>
                 </div>
                 <div class="row form-group mx-2 my-3">
-                    <select type="text" class="form-control" id="newLeadContactFirstName" placeholder="First Name">
-                        <option selected>Select First Name</option>
-                        <option value="1">One</option>
+                    <label for="newLeadContactName">
+                        Contact Name:
+                    </label>
+                    <select type="text" class="form-control" id="newLeadContactName" placeholder="Contact Name">
+                        <option selected>Suggested Contact Names</option>
                     </select>
                 </div>
                 <div class="row form-group mx-2 my-3">
-                    <select type="text" class="form-control" id="newLeadContactLastName" placeholder="Last Name">
-                        <option selected>Select Last Name</option>
-                        <option value="1">One</option>
-                    </select>
-                </div>
-                <div class="row form-group mx-2 my-3">
+                    <label for="newLeadPhone1">
+                        Phone 1:
+                    </label>
                     <select type="text" class="form-control" id="newLeadPhone1" placeholder="Phone 1">
-                        <option selected>Select Phone 1</option>
-                        <option value="1">One</option>
+                        <option selected>Suggested Phones</option>
                     </select>
                 </div>
                 <div class="row form-group mx-2 my-3">
+                    <label for="newLeadPhone2">
+                        Phone 2:
+                    </label>
                     <select type="text" class="form-control" id="newLeadPhone2" placeholder="Phone 2">
-                        <option selected>Select Phone 2</option>
-                        <option value="1">One</option>
+                        <option selected>Suggested Phones</option>
                     </select>
                 </div>
                 <div class="row form-group mx-2 my-3">
-                    <select type="text" class="form-control" id="newLeadAddress" placeholder="Address">
-                        <option selected>Select Address</option>
-                        <option value="1">One</option>
+                    <label for="newLeadAddress1">
+                        Address 1:
+                    </label>
+                    <select type="text" class="form-control" id="newLeadAddress1" placeholder="Address 1">
+                        <option selected>Suggested Addresses</option>
                     </select>
                 </div>
                 <div class="row form-group mx-2 my-3">
+                    <label for="newLeadAddress2">
+                        Address 1:
+                    </label>
+                    <select type="text" class="form-control" id="newLeadAddress2" placeholder="Address 2">
+                        <option selected>Suggested Addresses</option>
+                    </select>
+                </div>
+                <div class="row form-group mx-2 my-3">
+                    <label for="newLeadCompanyName">
+                        Website:
+                    </label>
                     <select type="text" class="form-control" id="newLeadWebsite" placeholder="Company Website">
-                        <option selected>Select Company Website</option>
-                        <option value="1">One</option>
+                        <option selected>Suggested Websites</option>
                     </select>
                 </div>
                 <div class="row form-group mx-2 my-3">
+                    <label for="newLeadCompanyName">
+                        Email:
+                    </label>
                     <select type="email" class="form-control" id="newLeadEmail" placeholder="Email">
-                        <option selected>Select Email</option>
-                        <option value="1">One</option>
+                        <option selected>Suggested Emails</option>
                     </select>
                 </div>
                 <div class="row my-3">

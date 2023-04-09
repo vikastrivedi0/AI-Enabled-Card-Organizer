@@ -185,6 +185,30 @@ function submitNewLead() {
 
     //take values and submit to database etc here
 
+    var dict = { 'lead_name':leadname, 
+                 'company_name':companyName,
+                 'phone1':phone1,
+                 'phone2':phone2, 
+                 'address':address,
+                 'website':website,
+                 'lead_email':email 
+                };
+
+    return fetch(serverUrl + "/save", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dict)
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new HttpError(response);
+        }
+    })
+
 }
 //TODO , need to pass in lead info in parameter while calling function, probably requires db
 function fillUpdateForm(){
@@ -227,21 +251,67 @@ function signIn() {
     let password = document.getElementById('signInPassword').value
 
     //use db to check if user and pass match
+      //username=firstName+lastName;
+      var dict={
+        'username':username,
+        'password':password
+    }
+
+    
+        return fetch(serverUrl + "/signin", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dict)
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new HttpError(response);
+            }
+        })
 
 }
 
 
+
 function signUp() {
+
     let firstName = document.getElementById('signUpFirstName').value
     let lastName = document.getElementById('signUpLastName').value
     let username = document.getElementById('signUpUsername').value
     let password = document.getElementById('signUpPassword').value
     let confirmPassword = document.getElementById('signUpPasswordConfirm').value
 
-    if (password === confirmPassword) {
-        //check if passwords match, then submit to db
-        //TODO
-    }
+
+    if (password === confirmPassword){
+        
+        //username=firstName+lastName;
+        var dict={
+            'username':username,
+            'password':password
+        }
+
+        
+    return fetch(serverUrl + "/signup", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dict)
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new HttpError(response);
+        }
+    })
+
+
+
 }
 //TODO
 function detectText(image) {

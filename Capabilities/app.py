@@ -27,8 +27,8 @@ storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
 translation_service = translation_service.TranslationService()
 comprehension_service = comprehension_service.ComprehensionService()
-dyanmodb_service=dynamodb_service.DynamoDBService('lead_data','username','S','lead_email','S')
-dyanmodb_service.create_table()
+dynamodb_service=dynamodb_service.DynamoDBService('lead_data','username','S','lead_email','S')
+dynamodb_service.create_table()
 
 dynamoauth_service=dynamoauth_service.DynamoAuthService('user_data','username','S')
 dynamoauth_service.create_table()
@@ -135,8 +135,8 @@ def save_lead():
     auth_header = app.current_request.headers.get('Authorization')
     if not auth_header:
         return Response(status_code=401, body='Unauthorized1')
-
-    token = auth_header.split(' ')[1]
+    print("Auth Header:"+auth_header)
+    token = auth_header.split(' ')[0]
     print('=====================')
     print(token)
     try:
@@ -153,7 +153,7 @@ def save_lead():
             'lead_email':{'S':request_data['lead_email']} 
         }
         
-        response=dyanmodb_service.put_item(input)
+        response=dynamodb_service.put_item(input)
         # image_info = storage_service.upload_file(file_bytes, file_name)
 
         return response
@@ -165,18 +165,32 @@ def save_lead():
 def search_all_lead():
     """processes file upload and saves file to storage service"""
     
-    response1=dyanmodb_service.get_all()
+    response1=dynamodb_service.get_all()
     
-    response2=dyanmodb_service.query(UserName)
+    
+    auth_header = app.current_request.headers.get('Authorization')
+    if not auth_header:
+        return Response(status_code=401, body='Unauthorized1')
+    print("Auth Header:"+auth_header)
+    token = auth_header.split(' ')[1]
+    print('=====================')
+    print(token)
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        UserName = payload['username']
+        response2=dynamodb_service.query(UserName)
 
-    return [response1,response2]
+        return [response1,response2]
+    except (jwt.exceptions.InvalidTokenError, KeyError):
+        return Response(status_code=401, body='Unauthorized2')
+
 
 
 @app.route('/delete', methods=['POST'], cors=True)
 def delete_item():
     """processes file upload and saves file to storage service"""
     request_data = json.loads(app.current_request.raw_body)
-    response=dyanmodb_service.delete_item(UserName,request_data['lead_email'])
+    response=dynamodb_service.delete_item(UserName,request_data['lead_email'])
     return response
     
 

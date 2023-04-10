@@ -155,7 +155,7 @@ function fillCreateForm(text) {
 }
 
 //TODO
-function submitNewLead() {
+  function submitNewLead() {
     let CompanyNameSelect = document.getElementById('newLeadCompanyName')
     let companyName = CompanyNameSelect.options[CompanyNameSelect.selectedIndex].value
 
@@ -195,8 +195,8 @@ function submitNewLead() {
                  'website':website,
                  'lead_email':email 
                 };
-
-    return fetch(serverUrl + "/save", {
+    console.log("token in js:"+localStorage.getItem('token'))
+    fetch(serverUrl + "/save", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
@@ -204,15 +204,18 @@ function submitNewLead() {
             'Authorization': localStorage.getItem('token')
         },
         body: JSON.stringify(dict)
-    }).then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new HttpError(response);
-        }
-    })
+        }).then(response => response.json())
+       .then(data => {
+        alert("Lead Data Saved");
+        window.location.replace("searchLeads.html", "_self");
+        }).catch((err) => {
+            console.log(err)
+        })
+        let json =  response.json()
 
-}
+        }
+
+
 //TODO , need to pass in lead info in parameter while calling function, probably requires db
 function fillUpdateForm(){
     let updatedLeadCompanyNameInput = document.getElementById('updatedLeadCompanyName')
@@ -324,6 +327,28 @@ function signUp() {
             throw new HttpError(response);
         }
     })
+}
+
+
+function searchLeads() {
+    
+    return fetch(serverUrl + "/search", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            },
+            body: JSON.stringify()
+
+        }).then(response => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new HttpError(response);
+            }
+        })
+
 }
 //TODO
 function detectText(image) {

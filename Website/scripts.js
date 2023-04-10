@@ -2,6 +2,7 @@
 "use strict";
 
 const serverUrl = "http://127.0.0.1:8000";
+// var authToken=localStorage.getItem('token')
 
 async function uploadImage() {
     // encode input file as base64 string for upload
@@ -185,7 +186,8 @@ function submitNewLead() {
 
     //take values and submit to database etc here
 
-    var dict = { 'lead_name':leadname, 
+    var address=address1+" "+address2
+    var dict = { 'lead_name':contactName, 
                  'company_name':companyName,
                  'phone1':phone1,
                  'phone2':phone2, 
@@ -198,7 +200,8 @@ function submitNewLead() {
         method: "POST",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
         },
         body: JSON.stringify(dict)
     }).then(response => {
@@ -268,9 +271,13 @@ function signIn() {
 
         }).then(response => {
             if (response.ok) {
-                window.open("createLeads.html", "_self")
-                alert("Welcome "+username+"!")
-                return response
+                return response.json().then(data=>{
+                    localStorage.setItem('token',data.token);
+                    window.open("createLeads.html", "_self");
+                    alert("Welcome "+username+"!")
+                    return data;
+                });
+                
             } else {
                 throw new HttpError(response);
             }

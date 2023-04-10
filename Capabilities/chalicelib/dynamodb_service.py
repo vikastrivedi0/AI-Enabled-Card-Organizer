@@ -65,7 +65,6 @@ class DynamoDBService:
             TableName=self.table_name
             )
 
-<<<<<<< HEAD
         print(response['Items'])
 
     def put_item(self, item):
@@ -82,10 +81,6 @@ class DynamoDBService:
 
         return response
         
-=======
-
-        return response['Items']
->>>>>>> master
 
     def query(self, username):
         response = self.client.query(
@@ -105,8 +100,6 @@ class DynamoDBService:
             Key={self.partition_key: {self.partition_type: username}, 
                 self.sort_key: {self.sort_type: lead_email}}
             )
-<<<<<<< HEAD
-=======
     def put_item(self, item):
         while True:
             if self.client.describe_table(TableName=self.table_name)['Table']['TableStatus'] == 'CREATING':
@@ -140,4 +133,3 @@ class DynamoDBService:
             Key={self.partition_key: {self.partition_type: username}, 
                 self.sort_key: {self.sort_type: lead_email}}
             )
->>>>>>> master

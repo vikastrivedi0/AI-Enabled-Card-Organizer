@@ -198,7 +198,8 @@ def signin():
     if (db_pswd['password']['S']==hashed_password):
         UserName=request_data['username']
         print("logging in ..."+UserName)
-        return True
+        response=json.dumps({'success':True}),200,{'ContentType':'application/json'}
+        return response
     return False
     #{'password': {'S': '4654d793972c3b6a1d48fb0ab58d9cb0de46c3d33d605f9222c283dfaa12d420'}, 'username': {'S': 'kanishka'}}
     # response=dynamoauth_service.put_item(input)

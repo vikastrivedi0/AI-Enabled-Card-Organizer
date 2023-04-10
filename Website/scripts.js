@@ -203,7 +203,7 @@ function updateLead(){
     //update values in db etc here
 }
 //TODO
-function signIn(){
+async function signIn(){
     let username = document.getElementById('signInUsername').value
     let password = document.getElementById('signInPassword').value
 
@@ -215,26 +215,28 @@ function signIn(){
     }
 
     
-        return fetch(serverUrl + "/signin", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dict)
-        }).then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new HttpError(response);
-            }
-        })
+        const response = await fetch(serverUrl + "/signin", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dict)
+    }).then(response => {
+        if (response.ok) {
+            window.open("/createLeads.html")
+            
+        } else {
+            throw new HttpError(response);
+        }
+    })
 
 }
 
 
 
 function signUp(){
+    
     let firstName = document.getElementById('signUpFirstName').value
     let lastName = document.getElementById('signUpLastName').value
     let username = document.getElementById('signUpUsername').value
@@ -259,7 +261,8 @@ function signUp(){
         body: JSON.stringify(dict)
     }).then(response => {
         if (response.ok) {
-            return response.json();
+            print( response.json());
+            window.open("http://127.0.0.1:8000/index.html");
         } else {
             throw new HttpError(response);
         }

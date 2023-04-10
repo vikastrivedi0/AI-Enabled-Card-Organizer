@@ -37,18 +37,18 @@ class DynamoAuthService:
         except self.client.exceptions.ResourceInUseException as e:
             pass
 
-    def encrypt_password(self, password):
-        iv = Fernet.generate_key()
-        cipher_suite = Fernet(self.fernet)
-        cipher_text = cipher_suite.encrypt(password.encode())
-        return iv + cipher_text
+    # def encrypt_password(self, password):
+    #     iv = Fernet.generate_key()
+    #     cipher_suite = Fernet(self.fernet)
+    #     cipher_text = cipher_suite.encrypt(password.encode())
+    #     return iv + cipher_text
 
-    def decrypt_password(self, encrypted_password):
-        iv = encrypted_password[:16]
-        cipher_text = encrypted_password[16:]
-        cipher_suite = Fernet(self.fernet)
-        password = cipher_suite.decrypt(iv + cipher_text)
-        return password.decode()
+    # def decrypt_password(self, encrypted_password):
+    #     iv = encrypted_password[:16]
+    #     cipher_text = encrypted_password[16:]
+    #     cipher_suite = Fernet(self.fernet)
+    #     password = cipher_suite.decrypt(iv + cipher_text)
+    #     return password.decode()
 
     def put_item(self, item):
         while True:

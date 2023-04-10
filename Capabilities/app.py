@@ -1,12 +1,11 @@
 import logging
-from chalice import Chalice
+from chalice import Chalice, Response
 from chalicelib import storage_service
 from chalicelib import recognition_service
 from chalicelib import translation_service
 from chalicelib import comprehension_service
 from chalicelib import dynamodb_service
 from chalicelib import dynamoauth_service
-
 
 import base64
 import json
@@ -154,8 +153,6 @@ def search_all_lead():
 
     return [response1,response2]
 
-   
-
 
 @app.route('/delete', methods=['POST'], cors=True)
 def delete_item():
@@ -198,7 +195,9 @@ def signin():
     if (db_pswd['password']['S']==hashed_password):
         UserName=request_data['username']
         print("logging in ..."+UserName)
-        return True
+        return Response(status_code=200,
+                        body={'Message': 'Login Sucess'},
+                        headers={'Content-Type': 'application/json'})
     return False
     #{'password': {'S': '4654d793972c3b6a1d48fb0ab58d9cb0de46c3d33d605f9222c283dfaa12d420'}, 'username': {'S': 'kanishka'}}
     # response=dynamoauth_service.put_item(input)

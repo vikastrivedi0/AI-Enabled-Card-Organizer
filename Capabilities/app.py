@@ -1,5 +1,5 @@
 import logging
-from chalice import Chalice
+from chalice import Chalice, Response
 from chalicelib import storage_service
 from chalicelib import recognition_service
 from chalicelib import translation_service

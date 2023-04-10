@@ -73,37 +73,37 @@ function translateImage(image) {
 function fillCreateForm(text) {
     //create selects, remove previous values except first one ("Suggested Company Names" option)
     let companyNameSelect = document.getElementById('newLeadCompanyName')
-    for (i = companyNameSelect.options.length - 1; i >= 1; i--) {
-        companyNameSelect.remove(i)
-    }
+    // for (i = companyNameSelect.options.length - 1; i >= 1; i--) {
+    //     companyNameSelect.remove(i)
+    // }
     let contactNameSelect = document.getElementById('newLeadContactName')
-    for (i = contactNameSelect.options.length - 1; i >= 1; i--) {
-        contactNameSelect.remove(i)
-    }
+    // for (i = contactNameSelect.options.length - 1; i >= 1; i--) {
+    //     contactNameSelect.remove(i)
+    // }
     let phone1Select = document.getElementById('newLeadPhone1')
-    for (i = phone1Select.options.length - 1; i >= 1; i--) {
-        phone1Select.remove(i)
-    }
+    // for (i = phone1Select.options.length - 1; i >= 1; i--) {
+    //     phone1Select.remove(i)
+    // }
     let phone2Select = document.getElementById('newLeadPhone2')
-    for (i = phone2Select.options.length - 1; i >= 1; i--) {
-        phone2Select.remove(i)
-    }
+    // for (i = phone2Select.options.length - 1; i >= 1; i--) {
+    //     phone2Select.remove(i)
+    // }
     let address1Select = document.getElementById('newLeadAddress1')
-    for (i = address1Select.options.length - 1; i >= 1; i--) {
-        address1Select.remove(i)
-    }
+    // for (i = address1Select.options.length - 1; i >= 1; i--) {
+    //     address1Select.remove(i)
+    // }
     let address2Select = document.getElementById('newLeadAddress2')
-    for (i = address2Select.options.length - 1; i >= 1; i--) {
-        address2Select.remove(i)
-    }
+    // for (i = address2Select.options.length - 1; i >= 1; i--) {
+    //     address2Select.remove(i)
+    // }
     let websiteSelect = document.getElementById('newLeadWebsite')
-    for (i = websiteSelect.options.length - 1; i >= 1; i--) {
-        websiteSelect.remove(i)
-    }
+    // for (i = websiteSelect.options.length - 1; i >= 1; i--) {
+    //     websiteSelect.remove(i)
+    // }
     let emailSelect = document.getElementById('newLeadEmail')
-    for (i = emailSelect.options.length - 1; i >= 1; i--) {
-        emailSelect.remove(i)
-    }
+    // for (i = emailSelect.options.length - 1; i >= 1; i--) {
+    //     emailSelect.remove(i)
+    // }
     //fill first and last names
     let names = text['names']
     names.forEach(name => {
@@ -265,9 +265,12 @@ function signIn() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(dict)
+
         }).then(response => {
             if (response.ok) {
-                return response.json();
+                window.open("createLeads.html", "_self")
+                alert("Welcome "+username+"!")
+                return response
             } else {
                 throw new HttpError(response);
             }
@@ -286,15 +289,17 @@ function signUp() {
     let confirmPassword = document.getElementById('signUpPasswordConfirm').value
 
 
+    console.log(username);
+    console.log(password);
+
     if (password === confirmPassword){
         
-        //username=firstName+lastName;
         var dict={
             'username':username,
             'password':password
         }
 
-        
+    }    
     return fetch(serverUrl + "/signup", {
         method: "POST",
         headers: {
@@ -304,14 +309,13 @@ function signUp() {
         body: JSON.stringify(dict)
     }).then(response => {
         if (response.ok) {
+            window.open("index.html", "_self")
+            alert("User Created!")
             return response.json();
         } else {
             throw new HttpError(response);
         }
     })
-
-
-
 }
 //TODO
 function detectText(image) {

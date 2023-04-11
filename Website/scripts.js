@@ -350,6 +350,65 @@ function searchLeads() {
         })
 
 }
+
+//response from search api is:
+// [
+//     null,
+//     [
+//         {
+//             "website": {
+//                 "S": "Suggested Websites"
+//             },
+//             "company_name": {
+//                 "S": "Suggested Company Names"
+//             },
+//             "lead_name": {
+//                 "S": "Suggested Contact Names"
+//             },
+//             "phone1": {
+//                 "S": "Suggested Phones"
+//             },
+//             "phone2": {
+//                 "S": "Suggested Phones"
+//             },
+//             "username": {
+//                 "S": "pi"
+//             },
+//             "lead_email": {
+//                 "S": "Suggested Emails"
+//             },
+//             "address": {
+//                 "S": "Suggested Addresses Suggested Addresses"
+//             }
+//         },
+//         {
+//             "website": {
+//                 "S": "Suggested Websites"
+//             },
+//             "company_name": {
+//                 "S": "DAVID PACKARD ELECTRICAL ENGINEERING"
+//             },
+//             "lead_name": {
+//                 "S": "RAFAEL ULATE"
+//             },
+//             "phone1": {
+//                 "S": "PHONE: (650) 725-9327"
+//             },
+//             "phone2": {
+//                 "S": "FAX: (650) 723- 1882"
+//             },
+//             "username": {
+//                 "S": "pi"
+//             },
+//             "lead_email": {
+//                 "S": "ulate@ee.stanford.edu"
+//             },
+//             "address": {
+//                 "S": "350 SERRA MALL, ROOM 170 STANFORD, CALIFORNIA 94305-9505"
+//             }
+//         }
+//     ]
+// ]
 //TODO
 function detectText(image) {
     // make server call to translate image

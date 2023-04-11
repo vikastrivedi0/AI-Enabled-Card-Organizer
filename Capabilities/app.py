@@ -129,7 +129,7 @@ def translate_image_text(image_id):
 
 @app.route('/save', methods=['POST'], cors=True)
 def save_lead():
-    """processes file upload and saves file to storage service"""
+    """saves the lead data into dynamodb"""
     request_data = json.loads(app.current_request.raw_body)
     
     auth_header = app.current_request.headers.get('Authorization')
@@ -163,7 +163,7 @@ def save_lead():
 
 @app.route('/search', methods=['POST'], cors=True)
 def search_all_lead():
-    """processes file upload and saves file to storage service"""
+    """searches the leads in dynamodb"""
     
     response1=dynamodb_service.get_all()
     
@@ -188,15 +188,27 @@ def search_all_lead():
 
 @app.route('/delete', methods=['POST'], cors=True)
 def delete_item():
-    """processes file upload and saves file to storage service"""
-    request_data = json.loads(app.current_request.raw_body)
-    response=dynamodb_service.delete_item(UserName,request_data['lead_email'])
-    return response
-    
+    """deletes the lead data"""
+    auth_header = app.current_request.headers.get('Authorization')
+    if not auth_header:
+        return Response(status_code=401, body='Unauthorized1')
+    print("Auth Header:"+auth_header)
+    token = auth_header.split(' ')[1]
+    print('=====================')
+    print(token)
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        UserName = payload['username']
+        request_data = json.loads(app.current_request.raw_body)
+        response=dynamodb_service.delete_item(UserName,request_data['lead_email'])
+        return response
+    except (jwt.exceptions.InvalidTokenError, KeyError):
+        return Response(status_code=401, body='Unauthorized2')
+
 
 @app.route('/signup', methods=['POST'], cors=True)
 def signup():
-    """processes file upload and saves file to storage service"""
+    """saves the user data"""
     request_data = json.loads(app.current_request.raw_body)
     # dict=request_data[dict]
     #print(request_data)
@@ -216,7 +228,7 @@ def signup():
 
 @app.route('/signin', methods=['POST'], cors=True)
 def signin():
-    """processes file upload and saves file to storage service"""
+    """user sign's in to the application"""
     request_data = json.loads(app.current_request.raw_body)
     
     password=request_data['password']

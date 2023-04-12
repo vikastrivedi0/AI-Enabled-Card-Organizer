@@ -27,10 +27,10 @@ storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
 translation_service = translation_service.TranslationService()
 comprehension_service = comprehension_service.ComprehensionService()
-dynamodb_service=dynamodb_service.DynamoDBService('lead_data','username','S','lead_email','S')
+dynamodb_service=dynamodb_service.DynamoDBService('lead_data','username', 'lead_email')
 dynamodb_service.create_table()
 
-dynamoauth_service=dynamoauth_service.DynamoAuthService('user_data','username','S')
+dynamoauth_service=dynamoauth_service.DynamoAuthService('user_data','username')
 dynamoauth_service.create_table()
 
 secret_key='1234'
@@ -143,14 +143,14 @@ def save_lead():
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
         UserName = payload['username']
         input={
-            'username':{'S':UserName},
-            'lead_name':{'S':request_data['lead_name']}, 
-            'company_name':{'S':request_data['company_name']},
-            'phone1':{'S':request_data['phone1']},
-            'phone2':{'S':request_data['phone2']}, 
-            'address':{'S':request_data['address']},
-            'website':{'S':request_data['website']},
-            'lead_email':{'S':request_data['lead_email']} 
+            'username':UserName,
+            'lead_name':request_data['lead_name'], 
+            'company_name':request_data['company_name'],
+            'phone1':request_data['phone1'],
+            'phone2':request_data['phone2'], 
+            'address':request_data['address'],
+            'website':request_data['website'],
+            'lead_email':request_data['lead_email']
         }
         
         response=dynamodb_service.put_item(input)
@@ -201,7 +201,7 @@ def delete_item():
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
         UserName = payload['username']
         request_data = json.loads(app.current_request.raw_body)
-        response=dynamodb_service.delete_item(UserName,request_data['lead_email'])
+        response=dynamodb_service.delete_item(UserName, request_data['lead_email'])
         return response
     except (jwt.exceptions.InvalidTokenError, KeyError):
         return Response(status_code=401, body='Unauthorized2')
@@ -218,8 +218,8 @@ def signup():
     #dict['password']=hashed_password
 
     input={
-        'username':{'S':request_data['username']},
-        'password':{'S':hashed_password}
+        'username':request_data['username'],
+        'password':hashed_password
     }
     response=dynamoauth_service.put_item(input)
     response=json.dumps(response)
@@ -237,7 +237,7 @@ def signin():
     #dict['password']=hashed_password
 
     db_pswd=dynamoauth_service.get_item(request_data['username'])
-    if (db_pswd['password']['S']==hashed_password):
+    if (db_pswd['password']==hashed_password):
         payload={
            'username':request_data['username'],
            'expiry': (datetime.utcnow()  + timedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")

@@ -1,31 +1,30 @@
 import boto3
-import time
-
-
 
 class DynamoAuthService:
     
-    def __init__(self, table_name, partition_key, partition_key_type):
+    def __init__(self, table_name, partition_key):
+        self.client = boto3.resource('dynamodb')
         self.table_name = table_name
         self.partition_key = partition_key
-        self.partition_key_type = partition_key_type
-        self.client = boto3.client('dynamodb')
-        
-   
+        try:
+            self.table = self.client.Table(self.table_name)
+        except self.client.meta.client.exceptions.ResourceInUseException as e:
+            self.table = None
+
     def create_table(self):
         try:
-            response = self.client.create_table(
+            self.table = self.client.create_table(
                 TableName=self.table_name,
                 KeySchema=[
                     {
                         'AttributeName': self.partition_key,
-                        'KeyType': 'HASH'
+                        'KeyType': 'HASH'   # Partition key
                     }
                 ],
                 AttributeDefinitions=[
                     {
                         'AttributeName': self.partition_key,
-                        'AttributeType': self.partition_key_type
+                        'AttributeType': 'S'
                     }
                 ],
                 ProvisionedThroughput={
@@ -33,63 +32,34 @@ class DynamoAuthService:
                     'WriteCapacityUnits': 5
                 }
             )
+            self.table.wait_until_exists()
+            #self.client.get_waiter('table_exists').wait(TableName=self.table_name)
             print(f"Table '{self.table_name}' created successfully.")
-        except self.client.exceptions.ResourceInUseException as e:
-            pass
+        
+        except self.client.meta.client.exceptions.ResourceInUseException as e:
+            self.table = self.client.Table(self.table_name)
+            #print(f"Error creating table '{self.table_name}': {e}")
 
-    # def encrypt_password(self, password):
-    #     iv = Fernet.generate_key()
-    #     cipher_suite = Fernet(self.fernet)
-    #     cipher_text = cipher_suite.encrypt(password.encode())
-    #     return iv + cipher_text
+    def get_item(self, username):
+        response = self.table.get_item(
+            Key={self.partition_key: username}, 
+            ConsistentRead=True)
 
-    # def decrypt_password(self, encrypted_password):
-    #     iv = encrypted_password[:16]
-    #     cipher_text = encrypted_password[16:]
-    #     cipher_suite = Fernet(self.fernet)
-    #     password = cipher_suite.decrypt(iv + cipher_text)
-    #     return password.decode()
+        return response['Item']
 
     def put_item(self, item):
-        while True:
-            if self.client.describe_table(TableName=self.table_name)['Table']['TableStatus'] == 'CREATING':
-                time.sleep(3)
-            else: 
-                break
+        # while True:
+        #     if self.table.table_status == 'CREATING':
+        #         time.sleep(3)
+        #     else: 
+        #         break
+        self.table.wait_until_exists()
+        response = self.table.put_item(Item=item)
 
-        # encrypted_password = self.encrypt_password(item['password']['S'])
-        # item['password'] = {'B': encrypted_password}
-        
-        response = self.client.put_item(
-            TableName=self.table_name, 
-            Item=item
-        )
+        return response
 
-        print(response)
+    def delete_item(self, username):
+        response = self.table.delete_item(
+            Key={self.partition_key: username})
 
-
-    def get_item(self, partition_key_value):
-        response = self.client.get_item(
-            TableName=self.table_name,
-            Key={
-                self.partition_key: {
-                    self.partition_key_type: partition_key_value
-                }
-            }
-        )
-
-        item = response.get('Item')
-        return item
-        # if item:
-        #     # Get the encrypted password from the item
-        #     encrypted_password = item.get('password').get('B')
-
-        #     # Decrypt the password using the same encryption algorithm and key
-        #     decrypted_password = self.decrypt_password(encrypted_password)
-
-        #     # Update the item dictionary with the decrypted password
-        #     item['password'] = {'S': decrypted_password}
-
-        #     return item
-        # else:
-        #     return None
+        return response

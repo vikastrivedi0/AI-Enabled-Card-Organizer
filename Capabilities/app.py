@@ -172,7 +172,7 @@ def search_all_lead():
     if not auth_header:
         return Response(status_code=401, body='Unauthorized1')
     print("Auth Header:"+auth_header)
-    token = auth_header.split(' ')[1]
+    token = auth_header.split(' ')[0]
     print('=====================')
     print(token)
     try:
@@ -180,6 +180,7 @@ def search_all_lead():
         UserName = payload['username']
         response2=dynamodb_service.query(UserName)
 
+        print([response1, response2])
         return [response1,response2]
     except (jwt.exceptions.InvalidTokenError, KeyError):
         return Response(status_code=401, body='Unauthorized2')

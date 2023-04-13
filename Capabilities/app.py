@@ -27,7 +27,7 @@ storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
 translation_service = translation_service.TranslationService()
 comprehension_service = comprehension_service.ComprehensionService()
-dynamodb_service=dynamodb_service.DynamoDBService('lead_data','username', 'lead_email')
+dynamodb_service=dynamodb_service.DynamoDBService('lead_data','username', 'lead_name')
 dynamodb_service.create_table()
 
 dynamoauth_service=dynamoauth_service.DynamoAuthService('user_data','username')

@@ -241,7 +241,7 @@ function fillUpdateForm(){
 //TODO, 
 function updateLead() {
     let companyName = document.getElementById('updatedLeadCompanyName').value
-    let firstName = document.getElementById('updatedLeadContactName').value
+    let contactName = document.getElementById('updatedLeadContactName').value
     let phone1 = document.getElementById('updatedLeadPhone1').value
     let phone2 = document.getElementById('updatedLeadPhone2').value
     let address1 = document.getElementById('updatedLeadAddress1').value
@@ -250,7 +250,35 @@ function updateLead() {
     let email = document.getElementById('updatedLeadEmail').value
 
     //update values in db etc here
-}
+    var address=address1+" "+address2
+    var dict = { 'lead_name':contactName, 
+                 'company_name':companyName,
+                 'phone1':phone1,
+                 'phone2':phone2, 
+                 'address':address,
+                 'website':website,
+                 'lead_email':email 
+                };
+    console.log("token in js:"+localStorage.getItem('token'))
+    fetch(serverUrl + "/save", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        },
+        body: JSON.stringify(dict)
+        }).then(response => response.json())
+            .then(data => {
+                alert("Lead Data Updated");
+                window.location.replace("searchLeads.html", "_self");
+                }).catch((err) => {
+                    console.log(err)
+                })
+        //let json =  response.json()
+
+        }
+
 //TODO
 function signIn() {
     let username = document.getElementById('signInUsername').value
@@ -470,4 +498,36 @@ class HttpError extends Error {
         this.name = "HttpError";
         this.response = response;
     }
+}
+
+function deleteLead()
+{
+    let contactName = document.getElementById('updatedLeadContactName').value
+    var dict={
+        'lead_name':contactName,
+     
+    }
+
+    
+        return fetch(serverUrl + "/delete", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dict)
+
+        }).then(response => {
+            if (response.ok) {
+                return response.json().then(data=>{
+                    alert("Lead Data Deleted!")
+                    window.location.replace("searchLeads.html", "_self");
+                    
+                   
+                });
+                
+            } else {
+                throw new HttpError(response);
+            }
+        })
 }

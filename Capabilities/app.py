@@ -170,11 +170,11 @@ def search_all_lead():
     
     auth_header = app.current_request.headers.get('Authorization')
     if not auth_header:
-        return Response(status_code=401, body='Unauthorized1')
-    print("Auth Header:"+auth_header)
+        return [response1]
+    # print("Auth Header:"+auth_header)
     token = auth_header.split(' ')[0]
-    print('=====================')
-    print(token)
+    # print('=====================')
+    # print(token)
     try:
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
         UserName = payload['username']
@@ -190,18 +190,19 @@ def search_all_lead():
 @app.route('/delete', methods=['POST'], cors=True)
 def delete_item():
     """deletes the lead data"""
+    
     auth_header = app.current_request.headers.get('Authorization')
     if not auth_header:
         return Response(status_code=401, body='Unauthorized1')
-    print("Auth Header:"+auth_header)
+    # print("Auth Header:"+auth_header)
     token = auth_header.split(' ')[1]
-    print('=====================')
-    print(token)
+    # print('=====================')
+    # print(token)
     try:
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
         UserName = payload['username']
         request_data = json.loads(app.current_request.raw_body)
-        response=dynamodb_service.delete_item(UserName, request_data['lead_email'])
+        response=dynamodb_service.delete_item(UserName, request_data['lead_name'])
         return response
     except (jwt.exceptions.InvalidTokenError, KeyError):
         return Response(status_code=401, body='Unauthorized2')
@@ -258,7 +259,4 @@ def signin():
 
 
     #{'password': {'S': '4654d793972c3b6a1d48fb0ab58d9cb0de46c3d33d605f9222c283dfaa12d420'}, 'username': {'S': 'kanishka'}}
-    # response=dynamoauth_service.put_item(input)
-    # response=json.dumps(response)
-    # #not returning response in required format
-    # return response
+    

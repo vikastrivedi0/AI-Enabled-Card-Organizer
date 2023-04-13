@@ -190,6 +190,7 @@ def search_all_lead():
 @app.route('/delete', methods=['POST'], cors=True)
 def delete_item():
     """deletes the lead data"""
+    
     auth_header = app.current_request.headers.get('Authorization')
     if not auth_header:
         return Response(status_code=401, body='Unauthorized1')
@@ -201,7 +202,7 @@ def delete_item():
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
         UserName = payload['username']
         request_data = json.loads(app.current_request.raw_body)
-        response=dynamodb_service.delete_item(UserName, request_data['lead_email'])
+        response=dynamodb_service.delete_item(UserName, request_data['lead_name'])
         return response
     except (jwt.exceptions.InvalidTokenError, KeyError):
         return Response(status_code=401, body='Unauthorized2')

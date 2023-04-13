@@ -1,19 +1,20 @@
 import boto3
-import time
 
 class DynamoDBService:
     
-    def __init__(self, table_name, partition_key, partition_type, sort_key, sort_type):
+    def __init__(self, table_name, partition_key, sort_key):
+        self.client = boto3.resource('dynamodb')
         self.table_name = table_name
         self.partition_key = partition_key
-        self.partition_type = partition_type
         self.sort_key = sort_key
-        self.sort_type = sort_type
-        self.client = boto3.client('dynamodb')
+        try:
+            self.table = self.client.Table(self.table_name)
+        except self.client.meta.client.exceptions.ResourceInUseException as e:
+            self.table = None
 
     def create_table(self):
         try:
-            table = self.client.create_table(
+            self.table = self.client.create_table(
                 TableName=self.table_name,
                 KeySchema=[
                     {
@@ -28,11 +29,11 @@ class DynamoDBService:
                 AttributeDefinitions=[
                     {
                         'AttributeName': self.partition_key,
-                        'AttributeType': self.partition_type
+                        'AttributeType': 'S'
                     }, 
                     {
                         'AttributeName': self.sort_key,
-                        'AttributeType': self.sort_type
+                        'AttributeType': 'S'
                     }
                 ],
                 ProvisionedThroughput={
@@ -40,82 +41,50 @@ class DynamoDBService:
                     'WriteCapacityUnits': 5
                 }
             )
-
-            self.client.get_waiter('table_exists').wait(TableName=self.table_name)
+            self.table.wait_until_exists()
+            #self.client.get_waiter('table_exists').wait(TableName=self.table_name)
             print(f"Table '{self.table_name}' created successfully.")
-
-        except self.client.exceptions.ResourceInUseException as e:
-            pass
+        
+        except self.client.meta.client.exceptions.ResourceInUseException as e:
+            self.table = self.client.Table(self.table_name)
+            #print(f"Error creating table '{self.table_name}': {e}")
 
     def get_item(self, username, lead_email):
-        try:
-            response = self.client.get_item(
-                TableName=self.table_name, 
-                Key={self.partition_key: {self.partition_type: username}, 
-                self.sort_key: {self.sort_type: lead_email}}, 
-                ConsistentRead=True)
-            print("get_item() returned:", response['Item'])
-            return response['Item']
+        response = self.table.get_item(
+            Key={
+                self.partition_key: username, 
+                self.sort_key: lead_email
+            }, 
+            ConsistentRead=True)
 
-        except self.client.exceptions.ResourceNotFoundException:
-            print(f"Item does not exist...")
+        return response['Item']
 
     def get_all(self):
-        response = self.client.scan(
-            TableName=self.table_name
-            )
-
-
+        response = self.table.scan()
         return response['Items']
 
-    def query(self, username):
-        response = self.client.query(
-            TableName = self.table_name, 
-            KeyConditionExpression='username = :pk', 
-            ExpressionAttributeValues={':pk': {'S': username}}
-            )
-
-        for item in response['Items']:
-            print(item)
-
-        return response['Items']
-
-    def delete_item(self, username, lead_email):
-        response = self.client.delete_item(
-            TableName=self.table_name, 
-            Key={self.partition_key: {self.partition_type: username}, 
-                self.sort_key: {self.sort_type: lead_email}}
-            )
     def put_item(self, item):
-        while True:
-            if self.client.describe_table(TableName=self.table_name)['Table']['TableStatus'] == 'CREATING':
-                time.sleep(3)
-            else: 
-                break
-
-        response = self.client.put_item(
-            TableName=self.table_name, 
-            Item=item
-            )
+        # while True:
+        #     if self.table.table_status == 'CREATING':
+        #         time.sleep(3)
+        #     else: 
+        #         break
+        self.table.wait_until_exists()
+        response = self.table.put_item(Item=item)
 
         return response
         
 
     def query(self, username):
-        response = self.client.query(
-            TableName = self.table_name, 
+        response = self.table.query(
             KeyConditionExpression='username = :pk', 
-            ExpressionAttributeValues={':pk': {'S': username}}
+            ExpressionAttributeValues={':pk': username}
             )
-
-        for item in response['Items']:
-            print(item)
 
         return response['Items']
 
     def delete_item(self, username, lead_email):
-        response = self.client.delete_item(
-            TableName=self.table_name, 
-            Key={self.partition_key: {self.partition_type: username}, 
-                self.sort_key: {self.sort_type: lead_email}}
-            )
+        response = self.table.delete_item(
+            Key={self.partition_key: username, self.sort_key: lead_email})
+
+        return response

@@ -10,12 +10,15 @@ from chalicelib import dynamoauth_service
 import base64
 import json
 import hashlib
+from datetime import datetime,timedelta
+import jwt
+
 #####
 # chalice app configuration
 #####
 app = Chalice(app_name='Capabilities')
 app.debug = True
-UserName="kanishka"
+
 #####
 # services initialization
 #####
@@ -24,11 +27,13 @@ storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
 translation_service = translation_service.TranslationService()
 comprehension_service = comprehension_service.ComprehensionService()
-dyanmodb_service=dynamodb_service.DynamoDBService('lead_data','username','S','lead_email','S')
-dyanmodb_service.create_table()
+dynamodb_service=dynamodb_service.DynamoDBService('lead_data','username', 'lead_name')
+dynamodb_service.create_table()
 
-dynamoauth_service=dynamoauth_service.DynamoAuthService('user_data','username','S')
+dynamoauth_service=dynamoauth_service.DynamoAuthService('user_data','username')
 dynamoauth_service.create_table()
+
+secret_key='1234'
 #####
 # RESTful endpoints
 #####
@@ -124,47 +129,87 @@ def translate_image_text(image_id):
 
 @app.route('/save', methods=['POST'], cors=True)
 def save_lead():
-    """processes file upload and saves file to storage service"""
+    """saves the lead data into dynamodb"""
     request_data = json.loads(app.current_request.raw_body)
-    input={
-        'username':{'S':UserName},
-        'lead_name':{'S':request_data['lead_name']}, 
-                 'company_name':{'S':request_data['company_name']},
-                 'phone1':{'S':request_data['phone1']},
-                 'phone2':{'S':request_data['phone2']}, 
-                 'address':{'S':request_data['address']},
-                 'website':{'S':request_data['website']},
-                 'lead_email':{'S':request_data['lead_email']} 
-    }
     
-    response=dyanmodb_service.put_item(input)
-    # image_info = storage_service.upload_file(file_bytes, file_name)
+    auth_header = app.current_request.headers.get('Authorization')
+    if not auth_header:
+        return Response(status_code=401, body='Unauthorized1')
+    print("Auth Header:"+auth_header)
+    token = auth_header.split(' ')[0]
+    print('=====================')
+    print(token)
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        UserName = payload['username']
+        input={
+            'username':UserName,
+            'lead_name':request_data['lead_name'], 
+            'company_name':request_data['company_name'],
+            'phone1':request_data['phone1'],
+            'phone2':request_data['phone2'], 
+            'address':request_data['address'],
+            'website':request_data['website'],
+            'lead_email':request_data['lead_email']
+        }
+        
+        response=dynamodb_service.put_item(input)
+        # image_info = storage_service.upload_file(file_bytes, file_name)
 
-    return response
-
+        return response
+    except (jwt.exceptions.InvalidTokenError, KeyError):
+        return Response(status_code=401, body='Unauthorized2')
+    
 
 @app.route('/search', methods=['POST'], cors=True)
 def search_all_lead():
-    """processes file upload and saves file to storage service"""
+    """searches the leads in dynamodb"""
     
-    response1=dyanmodb_service.get_all()
+    response1=dynamodb_service.get_all()
     
-    response2=dyanmodb_service.query(UserName)
+    
+    auth_header = app.current_request.headers.get('Authorization')
+    if not auth_header:
+        return Response(status_code=401, body='Unauthorized1')
+    print("Auth Header:"+auth_header)
+    token = auth_header.split(' ')[0]
+    print('=====================')
+    print(token)
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        UserName = payload['username']
+        response2=dynamodb_service.query(UserName)
 
-    return [response1,response2]
+        print([response1, response2])
+        return [response1,response2]
+    except (jwt.exceptions.InvalidTokenError, KeyError):
+        return Response(status_code=401, body='Unauthorized2')
+
 
 
 @app.route('/delete', methods=['POST'], cors=True)
 def delete_item():
-    """processes file upload and saves file to storage service"""
-    request_data = json.loads(app.current_request.raw_body)
-    response=dyanmodb_service.delete_item(UserName,request_data['lead_email'])
-    return response
-    
+    """deletes the lead data"""
+    auth_header = app.current_request.headers.get('Authorization')
+    if not auth_header:
+        return Response(status_code=401, body='Unauthorized1')
+    print("Auth Header:"+auth_header)
+    token = auth_header.split(' ')[1]
+    print('=====================')
+    print(token)
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        UserName = payload['username']
+        request_data = json.loads(app.current_request.raw_body)
+        response=dynamodb_service.delete_item(UserName, request_data['lead_email'])
+        return response
+    except (jwt.exceptions.InvalidTokenError, KeyError):
+        return Response(status_code=401, body='Unauthorized2')
+
 
 @app.route('/signup', methods=['POST'], cors=True)
 def signup():
-    """processes file upload and saves file to storage service"""
+    """saves the user data"""
     request_data = json.loads(app.current_request.raw_body)
     # dict=request_data[dict]
     #print(request_data)
@@ -173,8 +218,8 @@ def signup():
     #dict['password']=hashed_password
 
     input={
-        'username':{'S':request_data['username']},
-        'password':{'S':hashed_password}
+        'username':request_data['username'],
+        'password':hashed_password
     }
     response=dynamoauth_service.put_item(input)
     response=json.dumps(response)
@@ -184,7 +229,7 @@ def signup():
 
 @app.route('/signin', methods=['POST'], cors=True)
 def signin():
-    """processes file upload and saves file to storage service"""
+    """user sign's in to the application"""
     request_data = json.loads(app.current_request.raw_body)
     
     password=request_data['password']
@@ -192,13 +237,26 @@ def signin():
     #dict['password']=hashed_password
 
     db_pswd=dynamoauth_service.get_item(request_data['username'])
-    if (db_pswd['password']['S']==hashed_password):
-        UserName=request_data['username']
-        print("logging in ..."+UserName)
-        return Response(status_code=200,
-                        body={'Message': 'Login Sucess'},
-                        headers={'Content-Type': 'application/json'})
-    return False
+    if (db_pswd['password']==hashed_password):
+        payload={
+           'username':request_data['username'],
+           'expiry': (datetime.utcnow()  + timedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
+        }
+        token=jwt.encode(payload,secret_key,algorithm='HS256')
+        print("sign in token:==============================\n",token)
+        return Response(body={'token':token},status_code=200)
+    else:
+        return Response(body='Invalid credentials0',status_code=401)
+    #     UserName=request_data['username']
+    #     print("logging in ..."+UserName)
+    #     return Response(status_code=200,
+    #                     body={'Message': 'Login Sucess'},
+    #                     headers={'Content-Type': 'application/json'})
+    # return False
+       
+
+
+
     #{'password': {'S': '4654d793972c3b6a1d48fb0ab58d9cb0de46c3d33d605f9222c283dfaa12d420'}, 'username': {'S': 'kanishka'}}
     # response=dynamoauth_service.put_item(input)
     # response=json.dumps(response)

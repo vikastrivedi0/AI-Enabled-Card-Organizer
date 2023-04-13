@@ -2,6 +2,7 @@
 "use strict";
 
 const serverUrl = "http://127.0.0.1:8000";
+// var authToken=localStorage.getItem('token')
 
 async function uploadImage() {
     // encode input file as base64 string for upload
@@ -154,7 +155,7 @@ function fillCreateForm(text) {
 }
 
 //TODO
-function submitNewLead() {
+  function submitNewLead() {
     let CompanyNameSelect = document.getElementById('newLeadCompanyName')
     let companyName = CompanyNameSelect.options[CompanyNameSelect.selectedIndex].value
 
@@ -185,7 +186,8 @@ function submitNewLead() {
 
     //take values and submit to database etc here
 
-    var dict = { 'lead_name':leadname, 
+    var address=address1+" "+address2
+    var dict = { 'lead_name':contactName, 
                  'company_name':companyName,
                  'phone1':phone1,
                  'phone2':phone2, 
@@ -193,23 +195,27 @@ function submitNewLead() {
                  'website':website,
                  'lead_email':email 
                 };
-
-    return fetch(serverUrl + "/save", {
+    console.log("token in js:"+localStorage.getItem('token'))
+    fetch(serverUrl + "/save", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
         },
         body: JSON.stringify(dict)
-    }).then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new HttpError(response);
-        }
-    })
+        }).then(response => response.json())
+       .then(data => {
+        alert("Lead Data Saved");
+        window.location.replace("searchLeads.html", "_self");
+        }).catch((err) => {
+            console.log(err)
+        })
+        let json =  response.json()
 
-}
+        }
+
+
 //TODO , need to pass in lead info in parameter while calling function, probably requires db
 function fillUpdateForm(){
     let updatedLeadCompanyNameInput = document.getElementById('updatedLeadCompanyName')
@@ -268,15 +274,20 @@ function signIn() {
 
         }).then(response => {
             if (response.ok) {
-                window.open("createLeads.html", "_self")
-                alert("Welcome "+username+"!")
-                return response
+                return response.json().then(data=>{
+                    localStorage.setItem('token',data.token);
+                    window.open("createLeads.html", "_self");
+                    alert("Welcome "+username+"!")
+                    return data;
+                });
+                
             } else {
                 throw new HttpError(response);
             }
         })
 
 }
+
 
 
 
@@ -317,6 +328,87 @@ function signUp() {
         }
     })
 }
+
+
+function searchLeads() {
+    
+    return fetch(serverUrl + "/search", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            },
+            body: JSON.stringify()
+
+        }).then(response => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new HttpError(response);
+            }
+        })
+
+}
+
+//response from search api is:
+// [
+//     null,
+//     [
+//         {
+//             "website": {
+//                 "S": "Suggested Websites"
+//             },
+//             "company_name": {
+//                 "S": "Suggested Company Names"
+//             },
+//             "lead_name": {
+//                 "S": "Suggested Contact Names"
+//             },
+//             "phone1": {
+//                 "S": "Suggested Phones"
+//             },
+//             "phone2": {
+//                 "S": "Suggested Phones"
+//             },
+//             "username": {
+//                 "S": "pi"
+//             },
+//             "lead_email": {
+//                 "S": "Suggested Emails"
+//             },
+//             "address": {
+//                 "S": "Suggested Addresses Suggested Addresses"
+//             }
+//         },
+//         {
+//             "website": {
+//                 "S": "Suggested Websites"
+//             },
+//             "company_name": {
+//                 "S": "DAVID PACKARD ELECTRICAL ENGINEERING"
+//             },
+//             "lead_name": {
+//                 "S": "RAFAEL ULATE"
+//             },
+//             "phone1": {
+//                 "S": "PHONE: (650) 725-9327"
+//             },
+//             "phone2": {
+//                 "S": "FAX: (650) 723- 1882"
+//             },
+//             "username": {
+//                 "S": "pi"
+//             },
+//             "lead_email": {
+//                 "S": "ulate@ee.stanford.edu"
+//             },
+//             "address": {
+//                 "S": "350 SERRA MALL, ROOM 170 STANFORD, CALIFORNIA 94305-9505"
+//             }
+//         }
+//     ]
+// ]
 //TODO
 function detectText(image) {
     // make server call to translate image

@@ -71,91 +71,72 @@ function translateImage(image) {
         }
     })
 }
+
+function addOptionToDatalist(datalist, optionValue) {
+    let newOption = document.createElement('option');
+    newOption.value = optionValue;
+    datalist.appendChild(newOption);
+}
+
 function fillCreateForm(text) {
-    //create selects, remove previous values except first one ("Suggested Company Names" option)
-    let companyNameSelect = document.getElementById('newLeadCompanyName')
-    // for (i = companyNameSelect.options.length - 1; i >= 1; i--) {
-    //     companyNameSelect.remove(i)
-    // }
-    let contactNameSelect = document.getElementById('newLeadContactName')
-    // for (i = contactNameSelect.options.length - 1; i >= 1; i--) {
-    //     contactNameSelect.remove(i)
-    // }
-    let phone1Select = document.getElementById('newLeadPhone1')
-    // for (i = phone1Select.options.length - 1; i >= 1; i--) {
-    //     phone1Select.remove(i)
-    // }
-    let phone2Select = document.getElementById('newLeadPhone2')
-    // for (i = phone2Select.options.length - 1; i >= 1; i--) {
-    //     phone2Select.remove(i)
-    // }
-    let address1Select = document.getElementById('newLeadAddress1')
-    // for (i = address1Select.options.length - 1; i >= 1; i--) {
-    //     address1Select.remove(i)
-    // }
-    let address2Select = document.getElementById('newLeadAddress2')
-    // for (i = address2Select.options.length - 1; i >= 1; i--) {
-    //     address2Select.remove(i)
-    // }
-    let websiteSelect = document.getElementById('newLeadWebsite')
-    // for (i = websiteSelect.options.length - 1; i >= 1; i--) {
-    //     websiteSelect.remove(i)
-    // }
-    let emailSelect = document.getElementById('newLeadEmail')
-    // for (i = emailSelect.options.length - 1; i >= 1; i--) {
-    //     emailSelect.remove(i)
-    // }
-    //fill first and last names
+    //create datalist pointers, remove previous values except first one ("Suggested Company Names" option)
+    let companyNameDataList = document.getElementById('newLeadCompanyName')
+    companyNameDataList.innerHTML = ''
+    let contactNameDataList = document.getElementById('newLeadContactName')
+    contactNameDataList.innerHTML = ''
+    let phone1DataList = document.getElementById('newLeadPhone1')
+    phone1DataList.innerHTML = ''
+    let phone2DataList = document.getElementById('newLeadPhone2')
+    phone2DataList.innerHTML = ''
+    let address1DataList = document.getElementById('newLeadAddress1')
+    address1DataList.innerHTML = ''
+    let address2DataList = document.getElementById('newLeadAddress2')
+    address2DataList.innerHTML = ''
+    let websiteDataList = document.getElementById('newLeadWebsite')
+    websiteDataList.innerHTML = ''
+    let emailDataList = document.getElementById('newLeadEmail')
+    emailDataList.innerHTML = ''
+
+    //fill company name
     let names = text['names']
     names.forEach(name => {
-        let newOption = new Option(name, name)
-        companyNameSelect.add(newOption, undefined)
+        addOptionToDatalist(companyNameDataList, name)
     });
+    //fill contact name
     names.forEach(name => {
-        let newOption = new Option(name, name)
-        contactNameSelect.add(newOption, undefined)
+        addOptionToDatalist(contactNameDataList, name)
     });
-
     //fill phone 1 and 2
     let phones = text['phones']
     phones.forEach(phone => {
-        let newOption = new Option(phone, phone)
-        phone1Select.add(newOption, undefined)
+        addOptionToDatalist(phone1DataList, phone)
     });
     phones.forEach(phone => {
-        let newOption = new Option(phone, phone)
-        phone2Select.add(newOption, undefined)
+        addOptionToDatalist(companyNameDataList, phone)
     });
-
     //fill addresses
     let addresses = text['addresses']
     addresses.forEach(address => {
-        let newOption = new Option(address, address)
-        address1Select.add(newOption, undefined)
+        addOptionToDatalist(companyNameDataList, address)
     });
     addresses.forEach(address => {
-        let newOption = new Option(address, address)
-        address2Select.add(newOption, undefined)
+        addOptionToDatalist(companyNameDataList, address)
     });
-
     //fill websites
     let websites = text['urls']
     websites.forEach(website => {
-        let newOption = new Option(website, website)
-        websiteSelect.add(newOption, undefined)
+        addOptionToDatalist(companyNameDataList, website)
     });
-
     //fill emails
     let emails = text['emails']
     emails.forEach(email => {
-        let newOption = new Option(email, email)
-        emailSelect.add(newOption, undefined)
+        addOptionToDatalist(companyNameDataList, email)
     });
 
 }
 
 //TODO
-  function submitNewLead() {
+function submitNewLead() {
     let CompanyNameSelect = document.getElementById('newLeadCompanyName')
     let companyName = CompanyNameSelect.options[CompanyNameSelect.selectedIndex].value
 
@@ -186,16 +167,17 @@ function fillCreateForm(text) {
 
     //take values and submit to database etc here
 
-    var address=address1+" "+address2
-    var dict = { 'lead_name':contactName, 
-                 'company_name':companyName,
-                 'phone1':phone1,
-                 'phone2':phone2, 
-                 'address':address,
-                 'website':website,
-                 'lead_email':email 
-                };
-    console.log("token in js:"+localStorage.getItem('token'))
+    var address = address1 + " " + address2
+    var dict = {
+        'lead_name': contactName,
+        'company_name': companyName,
+        'phone1': phone1,
+        'phone2': phone2,
+        'address': address,
+        'website': website,
+        'lead_email': email
+    };
+    console.log("token in js:" + localStorage.getItem('token'))
     fetch(serverUrl + "/save", {
         method: "POST",
         headers: {
@@ -204,40 +186,17 @@ function fillCreateForm(text) {
             'Authorization': localStorage.getItem('token')
         },
         body: JSON.stringify(dict)
-        }).then(response => response.json())
-       .then(data => {
-        alert("Lead Data Saved");
-        window.location.replace("searchLeads.html", "_self");
+    }).then(response => response.json())
+        .then(data => {
+            alert("Lead Data Saved");
+            window.location.replace("searchLeads.html", "_self");
         }).catch((err) => {
             console.log(err)
         })
-        let json =  response.json()
-
-        }
-
-
-//TODO , need to pass in lead info in parameter while calling function, probably requires db
-function fillUpdateForm(){
-    let updatedLeadCompanyNameInput = document.getElementById('updatedLeadCompanyName')
-    let updatedLeadContactNameInput = document.getElementById('updatedLeadContactName')
-    let updatedLeadPhone1Input = document.getElementById('updatedLeadPhone1')
-    let updatedLeadPhone2Input = document.getElementById('updatedLeadPhone2')
-    let updatedLeadAddress1Input = document.getElementById('updatedLeadAddress1')
-    let updatedLeadAddress2Input = document.getElementById('updatedLeadAddress2')
-    let updatedLeadWebsiteInput = document.getElementById('updatedLeadWebsite')
-    let updatedLeadEmailInput = document.getElementById('updatedLeadEmail')
-
-    //need to pull values when choosing update in searchLeads page, and insert them here
-    updatedLeadCompanyNameInput.value = ""
-    updatedLeadContactNameInput.value = ""
-    updatedLeadPhone1Input.value = ""
-    updatedLeadPhone2Input.value = ""
-    updatedLeadAddress1Input.value = ""
-    updatedLeadAddress2Input.value = ""
-    updatedLeadWebsiteInput.value = ""
-    updatedLeadEmailInput.value = ""
+    let json = response.json()
 
 }
+
 //TODO, 
 function updateLead() {
     let companyName = document.getElementById('updatedLeadCompanyName').value
@@ -250,16 +209,17 @@ function updateLead() {
     let email = document.getElementById('updatedLeadEmail').value
 
     //update values in db etc here
-    var address=address1+" "+address2
-    var dict = { 'lead_name':contactName, 
-                 'company_name':companyName,
-                 'phone1':phone1,
-                 'phone2':phone2, 
-                 'address':address,
-                 'website':website,
-                 'lead_email':email 
-                };
-    console.log("token in js:"+localStorage.getItem('token'))
+    var address = address1 + " " + address2
+    var dict = {
+        'lead_name': contactName,
+        'company_name': companyName,
+        'phone1': phone1,
+        'phone2': phone2,
+        'address': address,
+        'website': website,
+        'lead_email': email
+    };
+    console.log("token in js:" + localStorage.getItem('token'))
     fetch(serverUrl + "/save", {
         method: "POST",
         headers: {
@@ -268,16 +228,16 @@ function updateLead() {
             'Authorization': localStorage.getItem('token')
         },
         body: JSON.stringify(dict)
-        }).then(response => response.json())
-            .then(data => {
-                alert("Lead Data Updated");
-                window.location.replace("searchLeads.html", "_self");
-                }).catch((err) => {
-                    console.log(err)
-                })
-        //let json =  response.json()
+    }).then(response => response.json())
+        .then(data => {
+            alert("Lead Data Updated");
+            window.location.replace("searchLeads.html", "_self");
+        }).catch((err) => {
+            console.log(err)
+        })
+    //let json =  response.json()
 
-        }
+}
 
 //TODO
 function signIn() {
@@ -285,34 +245,34 @@ function signIn() {
     let password = document.getElementById('signInPassword').value
 
     //use db to check if user and pass match
-      //username=firstName+lastName;
-      var dict={
-        'username':username,
-        'password':password
+    //username=firstName+lastName;
+    var dict = {
+        'username': username,
+        'password': password
     }
 
-    
-        return fetch(serverUrl + "/signin", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dict)
 
-        }).then(response => {
-            if (response.ok) {
-                return response.json().then(data=>{
-                    localStorage.setItem('token',data.token);
-                    window.open("createLeads.html", "_self");
-                    alert("Welcome "+username+"!")
-                    return data;
-                });
-                
-            } else {
-                throw new HttpError(response);
-            }
-        })
+    return fetch(serverUrl + "/signin", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dict)
+
+    }).then(response => {
+        if (response.ok) {
+            return response.json().then(data => {
+                localStorage.setItem('token', data.token);
+                window.open("createLeads.html", "_self");
+                alert("Welcome " + username + "!")
+                return data;
+            });
+
+        } else {
+            throw new HttpError(response);
+        }
+    })
 
 }
 
@@ -331,14 +291,14 @@ function signUp() {
     console.log(username);
     console.log(password);
 
-    if (password === confirmPassword){
-        
-        var dict={
-            'username':username,
-            'password':password
+    if (password === confirmPassword) {
+
+        var dict = {
+            'username': username,
+            'password': password
         }
 
-    }    
+    }
     return fetch(serverUrl + "/signup", {
         method: "POST",
         headers: {
@@ -359,23 +319,56 @@ function signUp() {
 
 
 function searchLeads() {
-    
-    return fetch(serverUrl + "/search", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('token')
-            },
-            body: JSON.stringify()
 
-        }).then(response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new HttpError(response);
-            }
-        })
+    return fetch(serverUrl + "/search", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        },
+        body: JSON.stringify()
+
+    }).then(response => {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw new HttpError(response);
+        }
+    })
+
+}
+
+function sendUpdateData(button) {
+    let row = button.parentElement.parentElement
+    let cells = row.getElementsByTagName('td')
+    let data = {
+        companyName: cells[0].innerText,
+        contactName: cells[1].innerText,
+        phone1: cells[2].innerText,
+        phone2: cells[3].innerText,
+        address1: cells[4].innerText,
+        address2: cells[5].innerText,
+        website: cells[6].innerText,
+        email: cells[7].innerText,
+    }
+
+    sessionStorage.setItem('updateData', JSON.stringify(data))
+    window.location.href = "updateLeads.html"
+
+}
+
+function populateUpdateForm() {
+    let data = JSON.parse(sessionStorage.getItem('updateData'))
+
+    document.getElementById('updatedLeadCompanyName').value = data.companyName
+    document.getElementById('updatedLeadContactName').value = data.contactName
+    document.getElementById('updatedLeadPhone1').value = data.phone1
+    document.getElementById('updatedLeadPhone2').value = data.phone2
+    document.getElementById('updatedLeadAddress1').value = data.address1
+    document.getElementById('updatedLeadAddress2').value = data.address2
+    document.getElementById('updatedLeadWebsite').value = data.website
+    document.getElementById('updatedLeadEmail').value = data.email
 
 }
 
@@ -500,34 +493,33 @@ class HttpError extends Error {
     }
 }
 
-function deleteLead()
-{
+function deleteLead() {
     let contactName = document.getElementById('updatedLeadContactName').value
-    var dict={
-        'lead_name':contactName,
-     
+    var dict = {
+        'lead_name': contactName,
+
     }
 
-    
-        return fetch(serverUrl + "/delete", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dict)
 
-        }).then(response => {
-            if (response.ok) {
-                return response.json().then(data=>{
-                    alert("Lead Data Deleted!")
-                    window.location.replace("searchLeads.html", "_self");
-                    
-                   
-                });
-                
-            } else {
-                throw new HttpError(response);
-            }
-        })
+    return fetch(serverUrl + "/delete", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dict)
+
+    }).then(response => {
+        if (response.ok) {
+            return response.json().then(data => {
+                alert("Lead Data Deleted!")
+                window.location.replace("searchLeads.html", "_self");
+
+
+            });
+
+        } else {
+            throw new HttpError(response);
+        }
+    })
 }

@@ -137,36 +137,16 @@ function fillCreateForm(text) {
 
 //TODO
 function submitNewLead() {
-    let CompanyNameSelect = document.getElementById('newLeadCompanyName')
-    let companyName = CompanyNameSelect.options[CompanyNameSelect.selectedIndex].value
+    let companyName = document.getElementById('newLeadCompanyName').value
+    let contactName = document.getElementById('newLeadContactName').value
+    let phone1 = document.getElementById('newLeadPhone1').value
+    let phone2 = document.getElementById('newLeadPhone2').value
+    let address1 = document.getElementById('newLeadAddress1').value
+    let address2 = document.getElementById('newLeadAddress2').value
+    let website = document.getElementById('newLeadWebsite').value
+    let email = document.getElementById('newLeadEmail').value
 
-    let contactNameSelect = document.getElementById('newLeadContactName')
-    let contactName = contactNameSelect.options[contactNameSelect.selectedIndex].value
-
-    let phone1Select = document.getElementById('newLeadPhone1')
-    let phone1 = phone1Select.options[phone1Select.selectedIndex].value
-
-
-    let phone2Select = document.getElementById('newLeadPhone2')
-    let phone2 = phone2Select.options[phone2Select.selectedIndex].value
-
-
-    let address1Select = document.getElementById('newLeadAddress1')
-    let address1 = address1Select.options[address1Select.selectedIndex].value
-
-    let address2Select = document.getElementById('newLeadAddress2')
-    let address2 = address2Select.options[address2Select.selectedIndex].value
-
-
-    let websiteSelect = document.getElementById('newLeadWebsite')
-    let website = websiteSelect.options[websiteSelect.selectedIndex].value
-
-
-    let emailSelect = document.getElementById('newLeadEmail')
-    let email = emailSelect.options[emailSelect.selectedIndex].value
-
-    //take values and submit to database etc here
-
+    //take values and submit to database here
     var address = address1 + " " + address2
     var dict = {
         'lead_name': contactName,

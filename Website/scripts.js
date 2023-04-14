@@ -80,21 +80,21 @@ function addOptionToDatalist(datalist, optionValue) {
 
 function fillCreateForm(text) {
     //create datalist pointers, remove previous values except first one ("Suggested Company Names" option)
-    let companyNameDataList = document.getElementById('newLeadCompanyName')
+    let companyNameDataList = document.getElementById('companyNameDataList')
     companyNameDataList.innerHTML = ''
-    let contactNameDataList = document.getElementById('newLeadContactName')
+    let contactNameDataList = document.getElementById('contactNameDataList')
     contactNameDataList.innerHTML = ''
-    let phone1DataList = document.getElementById('newLeadPhone1')
+    let phone1DataList = document.getElementById('phone1DataList')
     phone1DataList.innerHTML = ''
-    let phone2DataList = document.getElementById('newLeadPhone2')
+    let phone2DataList = document.getElementById('phone2DataList')
     phone2DataList.innerHTML = ''
-    let address1DataList = document.getElementById('newLeadAddress1')
+    let address1DataList = document.getElementById('address1DataList')
     address1DataList.innerHTML = ''
-    let address2DataList = document.getElementById('newLeadAddress2')
+    let address2DataList = document.getElementById('address2DataList')
     address2DataList.innerHTML = ''
-    let websiteDataList = document.getElementById('newLeadWebsite')
+    let websiteDataList = document.getElementById('websiteDataList')
     websiteDataList.innerHTML = ''
-    let emailDataList = document.getElementById('newLeadEmail')
+    let emailDataList = document.getElementById('emailDataList')
     emailDataList.innerHTML = ''
 
     //fill company name

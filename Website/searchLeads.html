@@ -32,7 +32,8 @@
     </nav>
     <div class="container mt-5">
         <h1>Search All Leads</h1>
-        <a href="" class="btn btn-primary" id="searchLeadButton" role="searchLeadButton" onclick="searchLeads()">Search</a>
+        <a href="" class="btn btn-primary" id="searchLeadButton" role="searchLeadButton"
+            onclick="searchLeads()">Search</a>
         <!-- <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="searchLeadsInput">Search</span>
@@ -100,9 +101,7 @@
                     <td>example.com</td>
                     <td>info@example.com</td>
                     <td>
-                        <a href="updateLeads.html" class="btn btn-primary" id="updateLeadButton"
-                            role="updateLeadButton">Update</a>
-                        <!--<button type="button" class="btn btn-warning">Replace</button>-->
+                        <button onclick="sendUpdateData(this)" class="btn btn-primary" id="updateLeadButton">Update</button>
                         <button type="button" class="btn btn-danger">Delete</button>
                     </td>
                 </tr>

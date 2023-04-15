@@ -32,7 +32,12 @@ async function uploadImage() {
     }).then(response => {
         if (response.ok) {
             return response.json();
-        } else {
+        } 
+        else if(response.status === 401) {
+            alert("Session Timed Out!");
+            Wwindow.location.replace("index.html", "_self")
+        }
+        else {
             throw new HttpError(response);
         }
     })
@@ -66,7 +71,12 @@ function translateImage(image) {
     }).then(response => {
         if (response.ok) {
             return response.json();
-        } else {
+        } 
+        else if(response.status === 401) {
+            alert("Session Timed Out!");
+            Wwindow.location.replace("index.html", "_self")
+        }
+        else {
             throw new HttpError(response);
         }
     })
@@ -177,7 +187,6 @@ function submitNewLead() {
 
 }
 
-//TODO, 
 function updateLead() {
     let companyName = document.getElementById('updatedLeadCompanyName').value
     let contactName = document.getElementById('updatedLeadContactName').value
@@ -249,7 +258,12 @@ function signIn() {
                 return data;
             });
 
-        } else {
+        } 
+        else if(response.status === 401) {
+            alert("Session Timed Out!");
+            Wwindow.location.replace("index.html", "_self")
+        }
+        else {
             throw new HttpError(response);
         }
     })
@@ -291,7 +305,12 @@ function signUp() {
             window.open("index.html", "_self")
             alert("User Created!")
             return response.json();
-        } else {
+        } 
+        else if(response.status === 401) {
+            alert("Session Timed Out!");
+            Wwindow.location.replace("index.html", "_self")
+        }
+        else {
             throw new HttpError(response);
         }
     })
@@ -299,58 +318,6 @@ function signUp() {
 
 
 function searchLeads() {
-
-    let data = JSON.parse(jsonData); // TODO
-    let searchAllTable = document.getElementById('searchAllTable');
-    let tbodyAllTable = searchAllTable.getElementsByTagName('tbody')[0];
-    let searchUserTable = document.getElementById('searchUserTable');
-    let tbodyUserTable = searchUserTable.getElementsByTagName('tbody')[0];
-
-    data[0].forEach((person) => {
-        const row = document.createElement('tr');
-        const companyNameCell = document.createElement('td');
-        const contactNameCell = document.createElement('td');
-        const phone1Cell = document.createElement('td');
-        const phone2Cell = document.createElement('td');
-        const address1Cell = document.createElement('td');
-        const address2Cell = document.createElement('td');
-        const websiteCell = document.createElement('td');
-        const emailCell = document.createElement('td');
-
-        row.appendChild(companyNameCell);
-        row.appendChild(contactNameCell);
-        row.appendChild(phone1Cell);
-        row.appendChild(phone2Cell);
-        row.appendChild(address1Cell);
-        row.appendChild(address2Cell);
-        row.appendChild(websiteCell);
-        row.appendChild(emailCell);
-
-        tbodyAllTable.appendChild(row);
-    });
-
-    data[1].forEach((person) => {
-        const row = document.createElement('tr');
-        const companyNameCell = document.createElement('td');
-        const contactNameCell = document.createElement('td');
-        const phone1Cell = document.createElement('td');
-        const phone2Cell = document.createElement('td');
-        const address1Cell = document.createElement('td');
-        const address2Cell = document.createElement('td');
-        const websiteCell = document.createElement('td');
-        const emailCell = document.createElement('td');
-
-        row.appendChild(companyNameCell);
-        row.appendChild(contactNameCell);
-        row.appendChild(phone1Cell);
-        row.appendChild(phone2Cell);
-        row.appendChild(address1Cell);
-        row.appendChild(address2Cell);
-        row.appendChild(websiteCell);
-        row.appendChild(emailCell);
-        
-        tbodyAllTable.appendChild(row);
-    });
 
     return fetch(serverUrl + "/search", {
         method: "POST",
@@ -364,10 +331,106 @@ function searchLeads() {
     }).then(response => {
         if (response.ok) {
             return response.json()
-        } else {
+        }
+        else if(response.status === 401) {
+            alert("Session Timed Out!");
+            Wwindow.location.replace("index.html", "_self")
+        } 
+        else {
             throw new HttpError(response);
         }
     })
+
+}
+
+function updateTables(){
+    
+    searchLeads().then(data =>{
+
+        let searchAllTable = document.getElementById('searchAllTable');
+        let tbodyAllTable = searchAllTable.getElementsByTagName('tbody')[0];
+        let searchUserTable = document.getElementById('searchUserTable');
+        let tbodyUserTable = searchUserTable.getElementsByTagName('tbody')[0];
+        
+        console.log(data[0])
+
+        data[0].forEach((user) => {
+            const row = document.createElement('tr');
+            const companyNameCell = document.createElement('td');
+            const contactNameCell = document.createElement('td');
+            const phone1Cell = document.createElement('td');
+            const phone2Cell = document.createElement('td');
+            const address1Cell = document.createElement('td');
+            const websiteCell = document.createElement('td');
+            const emailCell = document.createElement('td');
+
+            companyNameCell.textContent = user.company_name;
+            contactNameCell.textContent = user.lead_name;
+            phone1Cell.textContent = user.phone1;
+            phone2Cell.textContent = user.phone2;
+            address1Cell.textContent = user.address;
+            websiteCell.textContent = user.website;
+            emailCell.textContent = user.lead_email;
+
+            row.appendChild(companyNameCell);
+            row.appendChild(contactNameCell);
+            row.appendChild(phone1Cell);
+            row.appendChild(phone2Cell);
+            row.appendChild(address1Cell);
+            row.appendChild(websiteCell);
+            row.appendChild(emailCell);
+
+            tbodyAllTable.appendChild(row);
+        });
+
+        data[1].forEach((user) => {
+            const row = document.createElement('tr');
+            const companyNameCell = document.createElement('td');
+            const contactNameCell = document.createElement('td');
+            const phone1Cell = document.createElement('td');
+            const phone2Cell = document.createElement('td');
+            const address1Cell = document.createElement('td');
+            
+            const websiteCell = document.createElement('td');
+            const emailCell = document.createElement('td');
+            const buttonCell = document.createElement('td');
+
+            const updateButton = document.createElement('button');
+            updateButton.textContent = "Update";
+            updateButton.setAttribute("onclick","sendUpdateData(this)")
+            updateButton.className = "btn btn-primary";
+
+            const deleteButton = document.createElement('button');
+            deleteButton.setAttribute("onclick","deleteLead(this)")
+            deleteButton.textContent = "Delete"
+            deleteButton.className = "btn btn-danger";
+
+
+            companyNameCell.textContent = user.company_name;
+            contactNameCell.textContent = user.lead_name;
+            phone1Cell.textContent = user.phone1;
+            phone2Cell.textContent = user.phone2;
+            address1Cell.textContent = user.address;
+            
+            websiteCell.textContent = user.website;
+            emailCell.textContent = user.lead_email;
+            buttonCell.appendChild(updateButton);
+            buttonCell.appendChild(deleteButton);
+
+
+            row.appendChild(companyNameCell);
+            row.appendChild(contactNameCell);
+            row.appendChild(phone1Cell);
+            row.appendChild(phone2Cell);
+            row.appendChild(address1Cell);
+            row.appendChild(websiteCell);
+            row.appendChild(emailCell);
+            row.appendChild(buttonCell);
+            
+            tbodyUserTable.appendChild(row);
+        });
+    })
+    
 
 }
 
@@ -380,9 +443,8 @@ function sendUpdateData(button) {
         phone1: cells[2].innerText,
         phone2: cells[3].innerText,
         address1: cells[4].innerText,
-        address2: cells[5].innerText,
-        website: cells[6].innerText,
-        email: cells[7].innerText,
+        website: cells[5].innerText,
+        email: cells[6].innerText,
     }
 
     sessionStorage.setItem('updateData', JSON.stringify(data))
@@ -397,8 +459,8 @@ function populateUpdateForm() {
     document.getElementById('updatedLeadContactName').value = data.contactName
     document.getElementById('updatedLeadPhone1').value = data.phone1
     document.getElementById('updatedLeadPhone2').value = data.phone2
-    document.getElementById('updatedLeadAddress1').value = data.address1
-    document.getElementById('updatedLeadAddress2').value = data.address2
+    document.getElementById('updatedLeadAddress1').value = data.address
+    document.getElementById('updatedLeadAddress2').value = data.address
     document.getElementById('updatedLeadWebsite').value = data.website
     document.getElementById('updatedLeadEmail').value = data.email
 
@@ -476,7 +538,12 @@ function detectText(image) {
     }).then(response => {
         if (response.ok) {
             return response.json();
-        } else {
+        }
+        else if(response.status === 401) {
+            alert("Session Timed Out!");
+            Wwindow.location.replace("index.html", "_self")
+        } 
+        else {
             throw new HttpError(response);
         }
     })
@@ -525,33 +592,41 @@ class HttpError extends Error {
     }
 }
 
-function deleteLead() {
-    let contactName = document.getElementById('updatedLeadContactName').value
-    var dict = {
-        'lead_name': contactName,
-
+function deleteLead(button) {
+    let row = button.parentElement.parentElement
+    let cells = row.getElementsByTagName('td')
+    let dict = {
+        'lead_name': cells[1].innerText,
     }
-
 
     return fetch(serverUrl + "/delete", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
         },
         body: JSON.stringify(dict)
 
     }).then(response => {
-        if (response.ok) {
-            return response.json().then(data => {
-                alert("Lead Data Deleted!")
-                window.location.replace("searchLeads.html", "_self");
+        try{
+            if (response.ok) {
+                return response.json().then(data => {
+                    alert("Lead Data Deleted!")
+                    window.location.replace("searchLeads.html", "_self")
+    
+                });
+    
+            }else if(response.status === 401) {
+                alert("Session Timed Out!");
+                Wwindow.location.replace("index.html", "_self")
+            }
+            else {
+                throw new HttpError(response);
+            }
+        }
+        catch{
 
-
-            });
-
-        } else {
-            throw new HttpError(response);
         }
     })
 }

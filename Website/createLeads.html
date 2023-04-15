@@ -41,7 +41,7 @@
                         <img id="imageOutput" />
                     </div>
                 </div>
-                <h2>Translations:</h2>
+                <button class="btn btn-outline-primary"id="showTranslationsButton" onclick="Translate()">Show Translations:</button>
                 <div id="translations"></div>
             </div>
 
@@ -50,68 +50,60 @@
                     <h2>Lead Information</h2>
                 </div>
                 <div class="row form-group mx-2 my-3">
-                    <label for="newLeadCompanyName">
+                    <label for="companyNameDataList" class="form-label">
                         Company Name:
                     </label>
-                    <select class="form-control" id="newLeadCompanyName" placeholder="Company Name">
-                        <option selected>Suggested Company Names</option>
-                    </select>
+                    <input class="form-control" id="newLeadCompanyName" list="companyNameDataList" placeholder="Suggested Company Names">
+                    <datalist id="companyNameDataList"></datalist>
                 </div>
                 <div class="row form-group mx-2 my-3">
-                    <label for="newLeadContactName">
+                    <label for="newLeadContactName" class="form-label">
                         Contact Name:
                     </label>
-                    <select type="text" class="form-control" id="newLeadContactName" placeholder="Contact Name">
-                        <option selected>Suggested Contact Names</option>
-                    </select>
+                    <input class="form-control" id="newLeadContactName" list="contactNameDataList" placeholder="Suggested Contact Names">
+                    <datalist id="contactNameDataList"></datalist>
                 </div>
                 <div class="row form-group mx-2 my-3">
-                    <label for="newLeadPhone1">
+                    <label for="newLeadPhone1" class="form-label">
                         Phone 1:
                     </label>
-                    <select type="text" class="form-control" id="newLeadPhone1" placeholder="Phone 1">
-                        <option selected>Suggested Phones</option>
-                    </select>
+                    <input class="form-control" id="newLeadPhone1" list="phone1DataList" placeholder="Suggested Phones">
+                    <datalist id="phone1DataList"></datalist>
                 </div>
-                <div class="row form-group mx-2 my-3">
+                <div class="row form-group mx-2 my-3"  class="form-label">
                     <label for="newLeadPhone2">
                         Phone 2:
                     </label>
-                    <select type="text" class="form-control" id="newLeadPhone2" placeholder="Phone 2">
-                        <option selected>Suggested Phones</option>
-                    </select>
+                    <input class="form-control" id="newLeadPhone2" list="phone2DataList" placeholder="Suggested Phones">
+                    <datalist id="phone2DataList"></datalist>
                 </div>
-                <div class="row form-group mx-2 my-3">
+                <div class="row form-group mx-2 my-3"  class="form-label">
                     <label for="newLeadAddress1">
                         Address 1:
                     </label>
-                    <select type="text" class="form-control" id="newLeadAddress1" placeholder="Address 1">
-                        <option selected>Suggested Addresses</option>
-                    </select>
+                    <input class="form-control" id="newLeadAddress1" list="address1DataList" placeholder="Suggested Addresses">
+                    <datalist id="address1DataList"></datalist>
                 </div>
-                <div class="row form-group mx-2 my-3">
+                <div class="row form-group mx-2 my-3"  class="form-label">
                     <label for="newLeadAddress2">
                         Address 1:
                     </label>
-                    <select type="text" class="form-control" id="newLeadAddress2" placeholder="Address 2">
-                        <option selected>Suggested Addresses</option>
-                    </select>
+                    <input class="form-control" id="newLeadAddress2" list="address2DataList" placeholder="Suggested Addresses">
+                    <datalist id="address2DataList"></datalist>
                 </div>
-                <div class="row form-group mx-2 my-3">
+                <div class="row form-group mx-2 my-3"  class="form-label">
                     <label for="newLeadWebsite">
                         Website:
                     </label>
-                    <select type="text" class="form-control" id="newLeadWebsite" placeholder="Company Website">
-                        <option selected>Suggested Websites</option>
-                    </select>
+                    <input class="form-control" id="newLeadWebsite" list="websiteDataList" placeholder="Suggested Websites">
+                    <datalist id="websiteDataList"></datalist>
                 </div>
-                <div class="row form-group mx-2 my-3">
+                <div class="row form-group mx-2 my-3"  class="form-label">
                     <label for="newLeadEmail">
                         Email:
                     </label>
-                    <select type="email" class="form-control" id="newLeadEmail" placeholder="Email">
-                        <option selected>Suggested Emails</option>
-                    </select>
+                    <input class="form-control" id="newLeadEmail" list="emailDataList" placeholder="Suggested Emails">
+                    <datalist id="emailDataList"></datalist>
                 </div>
                 <div class="row my-3">
                     <div class="col">

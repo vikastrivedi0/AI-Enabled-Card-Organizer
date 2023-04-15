@@ -300,6 +300,58 @@ function signUp() {
 
 function searchLeads() {
 
+    let data = JSON.parse(jsonData); // TODO
+    let searchAllTable = document.getElementById('searchAllTable');
+    let tbodyAllTable = searchAllTable.getElementsByTagName('tbody')[0];
+    let searchUserTable = document.getElementById('searchUserTable');
+    let tbodyUserTable = searchUserTable.getElementsByTagName('tbody')[0];
+
+    data[0].forEach((person) => {
+        const row = document.createElement('tr');
+        const companyNameCell = document.createElement('td');
+        const contactNameCell = document.createElement('td');
+        const phone1Cell = document.createElement('td');
+        const phone2Cell = document.createElement('td');
+        const address1Cell = document.createElement('td');
+        const address2Cell = document.createElement('td');
+        const websiteCell = document.createElement('td');
+        const emailCell = document.createElement('td');
+
+        row.appendChild(companyNameCell);
+        row.appendChild(contactNameCell);
+        row.appendChild(phone1Cell);
+        row.appendChild(phone2Cell);
+        row.appendChild(address1Cell);
+        row.appendChild(address2Cell);
+        row.appendChild(websiteCell);
+        row.appendChild(emailCell);
+
+        tbodyAllTable.appendChild(row);
+    });
+
+    data[1].forEach((person) => {
+        const row = document.createElement('tr');
+        const companyNameCell = document.createElement('td');
+        const contactNameCell = document.createElement('td');
+        const phone1Cell = document.createElement('td');
+        const phone2Cell = document.createElement('td');
+        const address1Cell = document.createElement('td');
+        const address2Cell = document.createElement('td');
+        const websiteCell = document.createElement('td');
+        const emailCell = document.createElement('td');
+
+        row.appendChild(companyNameCell);
+        row.appendChild(contactNameCell);
+        row.appendChild(phone1Cell);
+        row.appendChild(phone2Cell);
+        row.appendChild(address1Cell);
+        row.appendChild(address2Cell);
+        row.appendChild(websiteCell);
+        row.appendChild(emailCell);
+        
+        tbodyAllTable.appendChild(row);
+    });
+
     return fetch(serverUrl + "/search", {
         method: "POST",
         headers: {

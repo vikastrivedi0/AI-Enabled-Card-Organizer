@@ -112,25 +112,25 @@ function fillCreateForm(text) {
         addOptionToDatalist(phone1DataList, phone)
     });
     phones.forEach(phone => {
-        addOptionToDatalist(companyNameDataList, phone)
+        addOptionToDatalist(phone2DataList, phone)
     });
     //fill addresses
     let addresses = text['addresses']
     addresses.forEach(address => {
-        addOptionToDatalist(companyNameDataList, address)
+        addOptionToDatalist(address1DataList, address)
     });
     addresses.forEach(address => {
-        addOptionToDatalist(companyNameDataList, address)
+        addOptionToDatalist(address2DataList, address)
     });
     //fill websites
     let websites = text['urls']
     websites.forEach(website => {
-        addOptionToDatalist(companyNameDataList, website)
+        addOptionToDatalist(websiteDataList, website)
     });
     //fill emails
     let emails = text['emails']
     emails.forEach(email => {
-        addOptionToDatalist(companyNameDataList, email)
+        addOptionToDatalist(emailDataList, email)
     });
 
 }

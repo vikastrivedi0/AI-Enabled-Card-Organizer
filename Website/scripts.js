@@ -2,6 +2,7 @@
 "use strict";
 
 const serverUrl = "http://127.0.0.1:8000";
+//const serverUrl = "http://127.0.0.1:8000";
 // var authToken=localStorage.getItem('token')
 
 async function uploadImage() { 
@@ -474,7 +475,7 @@ function sendUpdateData(button) {
         contactName: cells[1].innerText,
         phone1: cells[2].innerText,
         phone2: cells[3].innerText,
-        address1: cells[4].innerText,
+        address: cells[4].innerText,
         website: cells[5].innerText,
         email: cells[6].innerText
     }
@@ -602,4 +603,11 @@ function deleteLead(button) {
 
 
     })
+}
+
+function signOut(){
+    window.location.replace("index.html", "_self")
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
+    
 }

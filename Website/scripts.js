@@ -33,8 +33,7 @@ async function uploadImage() {
         )
     }).then(response => {
         if (response.ok) {
-            let image = response.json();
-            return image;
+            return response.json();
         } else if (response.status === 401) {
             alert("Session Timed Out!");
             Wwindow.location.replace("index.html", "_self")
@@ -46,12 +45,29 @@ async function uploadImage() {
 
 function updateImage(image) {
     let imageElem = document.getElementById("imageOutput");
+    console.log(image);
     imageElem.style.width = '600px'
     imageElem.style.height = '400px'
     imageElem.src = image["fileUrl"];
     imageElem.alt = image["fileId"];
 
     return image;
+}
+
+function getUploadedImage() {
+  return new Promise((resolve, reject) => {
+    let imageElem = document.getElementById("imageOutput");
+    let imgSrc = imageElem.getAttribute("src");
+    let imgAlt = imageElem.getAttribute("alt");
+
+    let imgJson = JSON.stringify({ fileUrl: imgSrc, fileId: imgAlt });
+    console.log(imgJson);
+    if (imgSrc && imgAlt) {
+      resolve(imgJson);
+    } else {
+      reject("Failed to get uploaded image.");
+    }
+  });
 }
 
 function clearFile() {
@@ -62,6 +78,9 @@ function clearFile() {
 function translateImage(image) {
     // make server call to translate image
     // and return the server upload promise
+
+    console.log(image)
+    console.log(image["fileId"])
     return fetch(serverUrl + "/images/" + image["fileId"] + "/translate-text", {
         method: "POST",
         headers: {
@@ -74,10 +93,12 @@ function translateImage(image) {
     }).then(response => {
         if (response.ok) {
             return response.json();
-        } else if (response.status === 401) {
+        } 
+        else if(response.status === 401) {
             alert("Session Timed Out!");
-            Wwindow.location.replace("index.html", "_self")
-        } else {
+            window.location.replace("index.html", "_self")
+        }
+        else {        
             throw new HttpError(response);
         }
     })
@@ -332,6 +353,7 @@ function searchLeads() {
 
 }
 
+
 function updateTables() {
 
     searchLeads().then(data => {
@@ -379,17 +401,20 @@ function updateTables() {
             const phone1Cell = document.createElement('td');
             const phone2Cell = document.createElement('td');
             const address1Cell = document.createElement('td');
+
             const websiteCell = document.createElement('td');
             const emailCell = document.createElement('td');
             const buttonCell = document.createElement('td');
 
             const updateButton = document.createElement('button');
             updateButton.textContent = "Update";
+
             updateButton.setAttribute("onclick", "sendUpdateData(this)")
             updateButton.className = "btn btn-primary";
 
             const deleteButton = document.createElement('button');
             deleteButton.setAttribute("onclick", "deleteLead(this)")
+
             deleteButton.textContent = "Delete"
             deleteButton.className = "btn btn-danger";
 
@@ -399,7 +424,6 @@ function updateTables() {
             phone1Cell.textContent = user.phone1;
             phone2Cell.textContent = user.phone2;
             address1Cell.textContent = user.address;
-
             websiteCell.textContent = user.website;
             emailCell.textContent = user.lead_email;
             buttonCell.appendChild(updateButton);
@@ -419,6 +443,7 @@ function updateTables() {
         });
     })
 }
+
 function searchFunction(input, table) {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue;
@@ -486,6 +511,7 @@ function detectText(image) {
     }).then(response => {
         if (response.ok) {
             return response.json();
+
         } else if (response.status === 401) {
             alert("Session Timed Out!");
             Wwindow.location.replace("index.html", "_self")
@@ -519,14 +545,15 @@ function uploadAndDetect() {
     })
 }
 
-// function Translate(image) {
-    
-//     translateImage(image)
-//     .then(translations => annotateImage(translations))
-//     .catch(error => {
-//         alert("Error: " + error);
-//     })
-// }
+function Translate() {
+    getUploadedImage()
+        .then(image => translateImage(JSON.parse(image)))
+        .then(translations => annotateImage(translations))
+        .catch(error => {
+            alert("Error: " + error);
+        })
+}
+
 
 class HttpError extends Error {
     constructor(response) {
@@ -544,6 +571,7 @@ function deleteLead(button) {
     let row = button.parentElement.parentElement
     let cells = row.getElementsByTagName('td')
     let dict = {
+
         'lead_name': cells[1].innerText
     }
 

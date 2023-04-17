@@ -22,7 +22,7 @@ app.debug = True
 #####
 # services initialization
 #####
-storage_location = 'contentcen301220757.aws.ai'
+storage_location = 'contentcen301180583.aws.ai'
 storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
 translation_service = translation_service.TranslationService()

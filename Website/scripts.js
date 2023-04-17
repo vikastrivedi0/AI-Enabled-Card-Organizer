@@ -2,6 +2,7 @@
 "use strict";
 
 const serverUrl = "http://127.0.0.1:8000";
+//const serverUrl = "http://127.0.0.1:8000";
 // var authToken=localStorage.getItem('token')
 
 async function uploadImage() { 
@@ -602,4 +603,10 @@ function deleteLead(button) {
 
 
     })
+}
+
+function signOut(){
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
+    window.location.replace("index.html", "_self")
 }

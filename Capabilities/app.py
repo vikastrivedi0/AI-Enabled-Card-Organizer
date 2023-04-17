@@ -22,7 +22,7 @@ app.debug = True
 #####
 # services initialization
 #####
-storage_location = 'contentcen301220757.aws.ai'
+storage_location = 'contentcen301180583.aws.ai'
 storage_service = storage_service.StorageService(storage_location)
 recognition_service = recognition_service.RecognitionService(storage_service)
 translation_service = translation_service.TranslationService()
@@ -169,8 +169,8 @@ def search_all_lead():
     
     
     auth_header = app.current_request.headers.get('Authorization')
-    if not auth_header:
-        return [response1]
+    if auth_header == "null":
+        return json.dumps([response1])
     # print("Auth Header:"+auth_header)
     token = auth_header.split(' ')[0]
     # print('=====================')
@@ -181,7 +181,7 @@ def search_all_lead():
         response2=dynamodb_service.query(UserName)
 
         print([response1, response2])
-        return [response1,response2]
+        return json.dumps([response1, response2])
     except (jwt.exceptions.InvalidTokenError, KeyError):
         return Response(status_code=401, body='Unauthorized2')
 
@@ -195,7 +195,7 @@ def delete_item():
     if not auth_header:
         return Response(status_code=401, body='Unauthorized1')
     # print("Auth Header:"+auth_header)
-    token = auth_header.split(' ')[1]
+    token = auth_header.split(' ')[0]
     # print('=====================')
     # print(token)
     try:

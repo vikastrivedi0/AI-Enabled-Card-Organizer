@@ -25,6 +25,9 @@
                     </li>
                 </ul>
             </div>
+            <div class="mx-2">
+                <a href="index.html" id="signOutButton" class="btn btn-outline-danger" role="signOutButton">Sign out</a>
+            </div>
             <div>
                 <a href="signUp.html" class="btn btn-outline-warning" role="signUpButton">Sign Up</a>
             </div>
@@ -36,7 +39,8 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="searchAllLeadsInput">Search</span>
             </div>
-            <input type="text" id="searchUserLeadsInput" onkeyup="searchFunction('searchAllLeadsInput','searchAllTable')" class="form-control">
+            <input type="text" id="searchUserLeadsInput"
+                onkeyup="searchFunction('searchAllLeadsInput','searchAllTable')" class="form-control">
         </div>
         <table class="table table-striped table-bordered" id="searchAllTable">
             <thead class="thead-dark">
@@ -71,7 +75,8 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="searchUserLeadsInput">Search</span>
             </div>
-            <input type="text" id="searchUserLeadsInput" onkeyup="searchFunction('searchUserLeadsInput','searchUserTable')" class="form-control">
+            <input type="text" id="searchUserLeadsInput"
+                onkeyup="searchFunction('searchUserLeadsInput','searchUserTable')" class="form-control">
         </div>
         <table class="table table-striped table-bordered" id="searchUserTable">
             <thead class="thead-dark">
@@ -105,7 +110,7 @@
         </table>
 
     </div>
-    <script>        
+    <script>
         window.onload = updateTables()
     </script>
 </body>

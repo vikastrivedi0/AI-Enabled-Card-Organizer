@@ -1,18 +1,18 @@
-//show image on html, access image with event.target.files[0]
+// show image on html, access image with event.target.files[0]
 "use strict";
 
 const serverUrl = "http://127.0.0.1:8000";
 // var authToken=localStorage.getItem('token')
 
-async function uploadImage() {
+async function uploadImage() { 
+    
     // encode input file as base64 string for upload
     let file = document.getElementById("uploadImage").files[0];
 
     let converter = new Promise(function (resolve, reject) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result
-            .toString().replace(/^data:(.*,)?/, ''));
+        reader.onload = () => resolve(reader.result.toString().replace(/^data:(.*,)?/, ''));
         reader.onerror = (error) => reject(error);
     });
     let encodedString = await converter;
@@ -28,16 +28,16 @@ async function uploadImage() {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ filename: file.name, filebytes: encodedString })
+        body: JSON.stringify(
+            {filename: file.name, filebytes: encodedString}
+        )
     }).then(response => {
         if (response.ok) {
             return response.json();
-        } 
-        else if(response.status === 401) {
+        } else if (response.status === 401) {
             alert("Session Timed Out!");
-            window.location.replace("index.html", "_self")
-        }
-        else {
+            Wwindow.location.replace("index.html", "_self")
+        } else {
             throw new HttpError(response);
         }
     })
@@ -87,16 +87,18 @@ function translateImage(image) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ fromLang: "auto", toLang: "en" })
+        body: JSON.stringify(
+            {fromLang: "auto", toLang: "en"}
+        )
     }).then(response => {
         if (response.ok) {
             return response.json();
         } 
         else if(response.status === 401) {
             alert("Session Timed Out!");
-            Wwindow.location.replace("index.html", "_self")
+            window.location.replace("index.html", "_self")
         }
-        else {
+        else {        
             throw new HttpError(response);
         }
     })
@@ -108,8 +110,7 @@ function addOptionToDatalist(datalist, optionValue) {
     datalist.appendChild(newOption);
 }
 
-function fillCreateForm(text) {
-    //create datalist pointers, remove previous values except first one ("Suggested Company Names" option)
+function fillCreateForm(text) { // create datalist pointers, remove previous values except first one ("Suggested Company Names" option)
     let companyNameDataList = document.getElementById('companyNameDataList')
     companyNameDataList.innerHTML = ''
     let contactNameDataList = document.getElementById('contactNameDataList')
@@ -127,16 +128,16 @@ function fillCreateForm(text) {
     let emailDataList = document.getElementById('emailDataList')
     emailDataList.innerHTML = ''
 
-    //fill company name
+    // fill company name
     let names = text['names']
     names.forEach(name => {
         addOptionToDatalist(companyNameDataList, name)
     });
-    //fill contact name
+    // fill contact name
     names.forEach(name => {
         addOptionToDatalist(contactNameDataList, name)
     });
-    //fill phone 1 and 2
+    // fill phone 1 and 2
     let phones = text['phones']
     phones.forEach(phone => {
         addOptionToDatalist(phone1DataList, phone)
@@ -144,7 +145,7 @@ function fillCreateForm(text) {
     phones.forEach(phone => {
         addOptionToDatalist(phone2DataList, phone)
     });
-    //fill addresses
+    // fill addresses
     let addresses = text['addresses']
     addresses.forEach(address => {
         addOptionToDatalist(address1DataList, address)
@@ -152,12 +153,12 @@ function fillCreateForm(text) {
     addresses.forEach(address => {
         addOptionToDatalist(address2DataList, address)
     });
-    //fill websites
+    // fill websites
     let websites = text['urls']
     websites.forEach(website => {
         addOptionToDatalist(websiteDataList, website)
     });
-    //fill emails
+    // fill emails
     let emails = text['emails']
     emails.forEach(email => {
         addOptionToDatalist(emailDataList, email)
@@ -165,7 +166,7 @@ function fillCreateForm(text) {
 
 }
 
-//TODO
+// TODO
 function submitNewLead() {
     let companyName = document.getElementById('newLeadCompanyName').value
     let contactName = document.getElementById('newLeadContactName').value
@@ -176,7 +177,7 @@ function submitNewLead() {
     let website = document.getElementById('newLeadWebsite').value
     let email = document.getElementById('newLeadEmail').value
 
-    //take values and submit to database here
+    // take values and submit to database here
     var address = address1 + " " + address2
     var dict = {
         'lead_name': contactName,
@@ -196,13 +197,12 @@ function submitNewLead() {
             'Authorization': localStorage.getItem('token')
         },
         body: JSON.stringify(dict)
-    }).then(response => response.json())
-        .then(data => {
-            alert("Lead Data Saved");
-            window.location.replace("searchLeads.html", "_self");
-        }).catch((err) => {
-            console.log(err)
-        })
+    }).then(response => response.json()).then(data => {
+        alert("Lead Data Saved");
+        window.location.replace("searchLeads.html", "_self");
+    }).catch((err) => {
+        console.log(err)
+    })
     let json = response.json()
 
 }
@@ -217,7 +217,7 @@ function updateLead() {
     let website = document.getElementById('updatedLeadWebsite').value
     let email = document.getElementById('updatedLeadEmail').value
 
-    //update values in db etc here
+    // update values in db etc here
     var address = address1 + " " + address2
     var dict = {
         'lead_name': contactName,
@@ -237,24 +237,23 @@ function updateLead() {
             'Authorization': localStorage.getItem('token')
         },
         body: JSON.stringify(dict)
-    }).then(response => response.json())
-        .then(data => {
-            alert("Lead Data Updated");
-            window.location.replace("searchLeads.html", "_self");
-        }).catch((err) => {
-            console.log(err)
-        })
-    //let json =  response.json()
+    }).then(response => response.json()).then(data => {
+        alert("Lead Data Updated");
+        window.location.replace("searchLeads.html", "_self");
+    }).catch((err) => {
+        console.log(err)
+    })
+    // let json =  response.json()
 
 }
 
-//TODO
+// TODO
 function signIn() {
     let username = document.getElementById('signInUsername').value
     let password = document.getElementById('signInPassword').value
 
-    //use db to check if user and pass match
-    //username=firstName+lastName;
+    // use db to check if user and pass match
+    // username=firstName+lastName;
     var dict = {
         'username': username,
         'password': password
@@ -278,20 +277,15 @@ function signIn() {
                 return data;
             });
 
-        } 
-        else if(response.status === 401) {
+        } else if (response.status === 401) {
             alert("Session Timed Out!");
             Wwindow.location.replace("index.html", "_self")
-        }
-        else {
+        } else {
             throw new HttpError(response);
         }
     })
 
 }
-
-
-
 
 function signUp() {
 
@@ -325,12 +319,10 @@ function signUp() {
             window.open("index.html", "_self")
             alert("User Created!")
             return response.json();
-        } 
-        else if(response.status === 401) {
+        } else if (response.status === 401) {
             alert("Session Timed Out!");
             Wwindow.location.replace("index.html", "_self")
-        }
-        else {
+        } else {
             throw new HttpError(response);
         }
     })
@@ -351,27 +343,26 @@ function searchLeads() {
     }).then(response => {
         if (response.ok) {
             return response.json()
-        }
-        else if(response.status === 401) {
+        } else if (response.status === 401) {
             alert("Session Timed Out!");
             Wwindow.location.replace("index.html", "_self")
-        } 
-        else {
+        } else {
             throw new HttpError(response);
         }
     })
 
 }
 
-function updateTables(){
-    
-    searchLeads().then(data =>{
+
+function updateTables() {
+
+    searchLeads().then(data => {
 
         let searchAllTable = document.getElementById('searchAllTable');
         let tbodyAllTable = searchAllTable.getElementsByTagName('tbody')[0];
         let searchUserTable = document.getElementById('searchUserTable');
         let tbodyUserTable = searchUserTable.getElementsByTagName('tbody')[0];
-        
+
         console.log(data[0])
 
         data[0].forEach((user) => {
@@ -410,18 +401,20 @@ function updateTables(){
             const phone1Cell = document.createElement('td');
             const phone2Cell = document.createElement('td');
             const address1Cell = document.createElement('td');
-            
+
             const websiteCell = document.createElement('td');
             const emailCell = document.createElement('td');
             const buttonCell = document.createElement('td');
 
             const updateButton = document.createElement('button');
             updateButton.textContent = "Update";
-            updateButton.setAttribute("onclick","sendUpdateData(this)")
+
+            updateButton.setAttribute("onclick", "sendUpdateData(this)")
             updateButton.className = "btn btn-primary";
 
             const deleteButton = document.createElement('button');
-            deleteButton.setAttribute("onclick","deleteLead(this)")
+            deleteButton.setAttribute("onclick", "deleteLead(this)")
+
             deleteButton.textContent = "Delete"
             deleteButton.className = "btn btn-danger";
 
@@ -431,7 +424,6 @@ function updateTables(){
             phone1Cell.textContent = user.phone1;
             phone2Cell.textContent = user.phone2;
             address1Cell.textContent = user.address;
-            
             websiteCell.textContent = user.website;
             emailCell.textContent = user.lead_email;
             buttonCell.appendChild(updateButton);
@@ -446,13 +438,12 @@ function updateTables(){
             row.appendChild(websiteCell);
             row.appendChild(emailCell);
             row.appendChild(buttonCell);
-            
+
             tbodyUserTable.appendChild(row);
         });
     })
-    
-
 }
+
 function searchFunction(input, table) {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue;
@@ -485,12 +476,11 @@ function sendUpdateData(button) {
         phone2: cells[3].innerText,
         address1: cells[4].innerText,
         website: cells[5].innerText,
-        email: cells[6].innerText,
+        email: cells[6].innerText
     }
 
     sessionStorage.setItem('updateData', JSON.stringify(data))
     window.location.href = "updateLeads.html"
-
 }
 
 function populateUpdateForm() {
@@ -504,68 +494,8 @@ function populateUpdateForm() {
     document.getElementById('updatedLeadAddress2').value = data.address
     document.getElementById('updatedLeadWebsite').value = data.website
     document.getElementById('updatedLeadEmail').value = data.email
-
 }
 
-//response from search api is:
-// [
-//     null,
-//     [
-//         {
-//             "website": {
-//                 "S": "Suggested Websites"
-//             },
-//             "company_name": {
-//                 "S": "Suggested Company Names"
-//             },
-//             "lead_name": {
-//                 "S": "Suggested Contact Names"
-//             },
-//             "phone1": {
-//                 "S": "Suggested Phones"
-//             },
-//             "phone2": {
-//                 "S": "Suggested Phones"
-//             },
-//             "username": {
-//                 "S": "pi"
-//             },
-//             "lead_email": {
-//                 "S": "Suggested Emails"
-//             },
-//             "address": {
-//                 "S": "Suggested Addresses Suggested Addresses"
-//             }
-//         },
-//         {
-//             "website": {
-//                 "S": "Suggested Websites"
-//             },
-//             "company_name": {
-//                 "S": "DAVID PACKARD ELECTRICAL ENGINEERING"
-//             },
-//             "lead_name": {
-//                 "S": "RAFAEL ULATE"
-//             },
-//             "phone1": {
-//                 "S": "PHONE: (650) 725-9327"
-//             },
-//             "phone2": {
-//                 "S": "FAX: (650) 723- 1882"
-//             },
-//             "username": {
-//                 "S": "pi"
-//             },
-//             "lead_email": {
-//                 "S": "ulate@ee.stanford.edu"
-//             },
-//             "address": {
-//                 "S": "350 SERRA MALL, ROOM 170 STANFORD, CALIFORNIA 94305-9505"
-//             }
-//         }
-//     ]
-// ]
-//TODO
 function detectText(image) {
     // make server call to translate image
     // and return the server upload promise
@@ -575,16 +505,17 @@ function detectText(image) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ fromLang: "auto", toLang: "en" })
+        body: JSON.stringify(
+            {fromLang: "auto", toLang: "en"}
+        )
     }).then(response => {
         if (response.ok) {
             return response.json();
-        }
-        else if(response.status === 401) {
+
+        } else if (response.status === 401) {
             alert("Session Timed Out!");
             Wwindow.location.replace("index.html", "_self")
-        } 
-        else {
+        } else {
             throw new HttpError(response);
         }
     })
@@ -598,22 +529,20 @@ function annotateImage(translations) {
     translationsElem.clear
     for (let i = 0; i < translations.length; i++) {
         let translationElem = document.createElement("h6");
-        translationElem.appendChild(document.createTextNode(
-            translations[i]["text"] + " -> " + translations[i]["translation"]["translatedText"]
-        ));
+        translationElem.appendChild(document.createTextNode(translations[i]["text"] + " -> " + translations[i]["translation"]["translatedText"]));
         translationsElem.appendChild(document.createElement("hr"));
         translationsElem.appendChild(translationElem);
     }
 }
-//TODO
+// TODO
 function uploadAndDetect() {
     uploadImage()
-        .then(image => updateImage(image))
-        .then(image => detectText(image))
-        .then(text => fillCreateForm(text))
-        .catch(error => {
-            alert("Error: " + error);
-        })
+    .then(image => updateImage(image))
+    .then(image => detectText(image))
+    .then(text => fillCreateForm(text))
+    .catch(error => {
+        alert("Error: " + error);
+    })
 }
 
 function Translate() {
@@ -625,9 +554,14 @@ function Translate() {
         })
 }
 
+
 class HttpError extends Error {
     constructor(response) {
-        super(`${response.status} for ${response.url}`);
+        super(`${
+            response.status
+        } for ${
+            response.url
+        }`);
         this.name = "HttpError";
         this.response = response;
     }
@@ -637,7 +571,8 @@ function deleteLead(button) {
     let row = button.parentElement.parentElement
     let cells = row.getElementsByTagName('td')
     let dict = {
-        'lead_name': cells[1].innerText,
+
+        'lead_name': cells[1].innerText
     }
 
     return fetch(serverUrl + "/delete", {
@@ -650,24 +585,21 @@ function deleteLead(button) {
         body: JSON.stringify(dict)
 
     }).then(response => {
-        try{
-            if (response.ok) {
-                return response.json().then(data => {
-                    alert("Lead Data Deleted!")
-                    window.location.replace("searchLeads.html", "_self")
-    
-                });
-    
-            }else if(response.status === 401) {
-                alert("Session Timed Out!");
-                Wwindow.location.replace("index.html", "_self")
-            }
-            else {
-                throw new HttpError(response);
-            }
-        }
-        catch{
 
+        if (response.ok) {
+            return response.json().then(data => {
+                alert("Lead Data Deleted!")
+                window.location.replace("searchLeads.html", "_self")
+
+            });
+
+        } else if (response.status === 401) {
+            alert("Session Timed Out!");
+            window.location.replace("index.html", "_self")
+        } else {
+            throw new HttpError(response);
         }
+
+
     })
 }
